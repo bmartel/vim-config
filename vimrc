@@ -68,14 +68,15 @@ let g:ctrlp_map = '<leader>l'
 " The Silver Searcher
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ctrlp_user_command = 'ag --hidden --ignore .git -g ""'
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  let g:ctrlp_use_caching = 0
 endif
 
 " ripgrep
 if executable('rg')
   set grepprg=rg\ --vimgrep
   let g:ctrlp_user_command = 'rg --files --hidden --follow --glob "!.git/*"'
-  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+  let g:ctrlp_use_caching = 0
 endif
 
 "------------------------------------------------------------------------------
@@ -199,9 +200,7 @@ endif
 nnoremap <silent> <leader>b :Buffers<CR>
 
 "" Buffer nav
-noremap <leader>z :bp<CR>
 noremap <leader>q :bp<CR>
-noremap <leader>x :bn<CR>
 noremap <leader>w :bn<CR>
 
 "" Close buffer
@@ -216,6 +215,7 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
+
 "" Opens an edit command with the path of the currently edited file filled in
 noremap <Leader>nf :e <C-R>=expand("%:p:h") . "/" <CR>
 
