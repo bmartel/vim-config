@@ -1,13 +1,13 @@
 
 "------------------------------------------------------------------------------
-"           .----. .-.   .-.  .--.  .----.  .---. .----..-.          
-"           | {}  }|  `.'  | / {} \ | {}  }{_   _}| {_  | |          
-"           | {}  }| |\ /| |/  /\  \| .-. \  | |  | {__ | `--.       
-"           `----' `-' ` `-'`-'  `-'`-' `-'  `-'  `----'`----'       
-"           .-. .-..-..-.   .-. .---.  .----. .-. .-..----..-. .---. 
+"           .----. .-.   .-.  .--.  .----.  .---. .----..-.
+"           | {}  }|  `.'  | / {} \ | {}  }{_   _}| {_  | |
+"           | {}  }| |\ /| |/  /\  \| .-. \  | |  | {__ | `--.
+"           `----' `-' ` `-'`-'  `-'`-' `-'  `-'  `----'`----'
+"           .-. .-..-..-.   .-. .---.  .----. .-. .-..----..-. .---.
 "           | | | || ||  `.'  |/  ___}/  {}  \|  `| || {_  | |/   __}
 "           \ \_/ /| || |\ /| |\     }\      /| |\  || |   | |\  {_ }
-"            `---' `-'`-' ` `-' `---'  `----' `-' `-'`-'   `-' `---' 
+"            `---' `-'`-' ` `-' `---'  `----' `-' `-'`-'   `-' `---'
 "------------------------------------------------------------------------------
 
 
@@ -89,6 +89,12 @@ set hlsearch                        " highlight all search results
 let loaded_matchparen=1             " turn off match paren highlighting
 set list listchars=tab:\ \ ,trail:· " display tabs and trailing spaces
 
+set mousemodel=popup
+set t_Co=256
+set cursorline
+set guioptions=egmrti
+set gfn=Monospace\ 10
+
 if has("gui_mac") || has("gui_macvim")
   set guifont=Envy\ Code\ R:h14
   set transparency=0 " disable transparency
@@ -127,7 +133,7 @@ set wildmode=list:longest,list:full
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules
 
 " Disable visualbell
-set noerrorbells visualbell t_vb= 
+set noerrorbells visualbell t_vb=
 if has('autocmd')
   autocmd GUIEnter * set visualbell t_vb=
 endif
@@ -165,6 +171,9 @@ nnoremap <silent> <leader>f :Rgrep<CR>
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
+"" Clean search (highlight)
+nnoremap <silent> <leader><space> :noh<cr>
+
 " Edit VIMRC
 nmap <silent> <leader>ev :edit $MYVIMRC<cr>
 " Source VIMRC
@@ -186,9 +195,6 @@ if has('macunix')
   vmap <C-x> :!pbcopy<CR>
   vmap <C-c> :w !pbcopy<CR><CR>
 endif
-
-"" Clean search (highlight)
-nnoremap <silent> <leader><space> :noh<cr>
 
 "" Show buffer list
 nnoremap <silent> <leader>b :Buffers<CR>
