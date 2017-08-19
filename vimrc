@@ -16,12 +16,13 @@
 "------------------------------------------------------------------------------
 set encoding=utf-8            " Ensure encoding is UTF-8
 set nocompatible              " Disable Vi compatability
+set shell=/bin/bash           " Ensure bash is used for execution
 
 "------------------------------------------------------------------------------
 " VUNDLE CONFIG
 "------------------------------------------------------------------------------
 filetype off
-set rtp+=~/.vim/bundle/vundle           " Set the runtime path to include Vundle
+set rtp+=$HOME/.vim/bundle/Vundle.vim   " Set the runtime path to include Vundle
 call vundle#begin()                     " Initialize vundle
 Plugin 'gmarik/vundle'                  " Let Vundle manage Vundle
 Plugin 'ctrlpvim/ctrlp.vim'             " Quick file navigation
