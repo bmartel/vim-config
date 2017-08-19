@@ -93,7 +93,6 @@ set mousemodel=popup
 set t_Co=256
 set cursorline
 set guioptions=egmrti
-set gfn=Monospace\ 10
 
 if has("gui_mac") || has("gui_macvim")
   set guifont=Envy\ Code\ R:h14
@@ -222,6 +221,18 @@ noremap <Leader>nf :e <C-R>=expand("%:p:h") . "/" <CR>
 
 "" Opens a tab edit command with the path of the currently edited file filled
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+
+" Git
+nmap <leader>gb :Gblame<cr>
+nmap <leader>gc :Gcommit<cr>
+nmap <leader>gd :Gvdiff<cr>
+nmap <leader>gg :Ggrep
+nmap <leader>gl :Glog<cr>
+nmap <leader>gp :Git pull<cr>
+nmap <leader>gP :Git push<cr>
+nmap <leader>gs :Gstatus<cr>
+nmap <leader>gB :Gbrowse<cr>
+nmap <leader>gm :Gmerge<cr>
 
 "" Abbreviations
 cnoreabbrev W! w!
