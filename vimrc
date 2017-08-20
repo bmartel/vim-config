@@ -250,7 +250,7 @@ nnoremap <leader>gc :Git checkout<Space>
 nnoremap <leader>gb :Git branch<Space>
 nnoremap <leader>ge :Gedit<CR>
 nnoremap <leader>gr :Gread<CR>
-nnoremap <leader>gw :Gwrite<CR>
+nnoremap <leader>gw :Gwrite<CR><CR>
 nnoremap <leader>go :Gbrowse<CR>
 nnoremap <leader>gm :Gmerge<CR>
 nnoremap <leader>gi :Gblame<CR>
