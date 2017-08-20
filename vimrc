@@ -31,12 +31,13 @@ Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
 Plugin 'tpope/vim-fugitive'             " Help formatting commit messages
 Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
 Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
+Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
 Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
 call vundle#end()                       " Complete vunde initialization
 
-" enable filetype detection
-" and indent detection (based on filetype)
+"" enable filetype detection
+"" and indent detection (based on filetype)
 filetype plugin indent on
 
 "------------------------------------------------------------------------------
@@ -65,14 +66,14 @@ let g:ctrlp_show_hidden = 1        " include hidden files in results
 let g:ctrlp_working_path_mode = '' " stop setting git repo as root path
 let g:ctrlp_map = '<leader>l'
 
-" The Silver Searcher
+"" The Silver Searcher
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
 
-" ripgrep
+"" ripgrep
 if executable('rg')
   set grepprg=rg\ --vimgrep
   let g:ctrlp_user_command = 'rg --files --hidden --follow --glob "!.git/*"'
@@ -119,7 +120,7 @@ set smartcase                      " ignore case if lower, otherwise match case
 set splitbelow                     " split panes on the bottom
 set splitright                     " split panes to the right
 
-" indentation, spaces only, convert tabs
+"" indentation, spaces only, convert tabs
 set autoindent
 set smartindent
 set smarttab
@@ -128,11 +129,11 @@ set softtabstop=2
 set shiftwidth=2
 set expandtab
 
-" ignore files in search
+"" ignore files in search
 set wildmode=list:longest,list:full
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules
 
-" Disable visualbell
+"" Disable visualbell
 set noerrorbells visualbell t_vb=
 if has('autocmd')
   autocmd GUIEnter * set visualbell t_vb=
@@ -154,38 +155,42 @@ set scrolloff=3
 "------------------------------------------------------------------------------
 let mapleader = "," " Use better map leader
 
-" Change windows
+"" Change windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 "" Split windows
-noremap <Leader>h :<C-u>split<CR>
-noremap <Leader>v :<C-u>vsplit<CR>
+noremap <leader>h :<C-u>split<CR>
+noremap <leader>v :<C-u>vsplit<CR>
 
-" Search in files
+"" Search in files
 nnoremap <silent> <leader>f :Rgrep<CR>
 
-" search will center on the line it's found in.
+"" Open file browser
+nnoremap <silent> <leader>k :Ex<CR>
+
+"" search will center on the line it's found in.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
 "" Clean search (highlight)
-nnoremap <silent> <leader><space> :noh<cr>
+nnoremap <silent> <leader><space> :noh<CR>
 
-" Edit VIMRC
-nmap <silent> <leader>ev :edit $MYVIMRC<cr>
-" Source VIMRC
-nmap <silent> <leader>ee :source $MYVIMRC<cr>
+"" Edit VIMRC
+nmap <silent> <leader>ev :edit $MYVIMRC<CR>
 
-" Toggle light/dark background
+"" Source VIMRC
+nmap <silent> <leader>ee :source $MYVIMRC<CR>
+
+"" Toggle light/dark background
 map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 
 "" Delete current file
 nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
 
-" Copy/Cut/Paste
+"" Copy/Cut/Paste
 noremap YY "+y<CR>
 noremap <leader>p "+gP<CR>
 noremap XX "+x<CR>
@@ -216,23 +221,39 @@ vnoremap K :m '<-2<CR>gv=gv
 
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 
-"" Opens an edit command with the path of the currently edited file filled in
-noremap <Leader>nf :e <C-R>=expand("%:p:h") . "/" <CR>
+"" Set working directory
+nnoremap <leader>. :lcd %:p:h<CR>
 
-"" Opens a tab edit command with the path of the currently edited file filled
-noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+"" Create new file with the current path filled in
+noremap <leader>mf :!touch <C-R>=expand("%:p:h") . "/" <CR>
+
+"" Create new directory with the current path filled in
+noremap <leader>md :!mkdir <C-R>=expand("%:p:h") . "/" <CR>
+
+"" Open an edit command with the path of the currently edited file path filled in
+noremap <leader>ef :e <C-R>=expand("%:p:h") . "/" <CR>
+
+"" Open a tab emit command with the path of the currently edited file path filled
+noremap <leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 " Git
-nmap <leader>gb :Gblame<cr>
-nmap <leader>gc :Gcommit<cr>
-nmap <leader>gd :Gvdiff<cr>
-nmap <leader>gg :Ggrep
-nmap <leader>gl :Glog<cr>
-nmap <leader>gp :Git pull<cr>
-nmap <leader>gP :Git push<cr>
-nmap <leader>gs :Gstatus<cr>
-nmap <leader>gB :Gbrowse<cr>
-nmap <leader>gm :Gmerge<cr>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gC :Gcommit -v -q<CR>
+nnoremap <leader>gP :Git push<CR>
+nnoremap <leader>ga :Gcommit --ammend<CR>
+nnoremap <leader>gt :Gcommit -v -q %<CR>
+nnoremap <leader>gd :Gvdiff<CR>
+nnoremap <leader>gg :Ggrep
+nnoremap <leader>gl :Glog<CR>
+nnoremap <leader>gp :Git pull<CR>
+nnoremap <leader>gc :Git checkout<Space>
+nnoremap <leader>gb :Git branch<Space>
+nnoremap <leader>ge :Gedit<CR>
+nnoremap <leader>gr :Gread<CR>
+nnoremap <leader>gw :Gwrite<CR>
+nnoremap <leader>go :Gbrowse<CR>
+nnoremap <leader>gm :Gmerge<CR>
+nnoremap <leader>gi :Gblame<CR>
 
 "" Abbreviations
 cnoreabbrev W! w!
