@@ -30,6 +30,7 @@ Plugin 'vim-scripts/grep.vim'           " Grep search of files
 Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
 Plugin 'tpope/vim-fugitive'             " Help formatting commit messages
 Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
+Plugin 'tpope/vim-sleuth'               " Autodetect spaces/tabs
 Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
 Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
