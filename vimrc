@@ -191,6 +191,12 @@ map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 "" Delete current file
 nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
 
+"" Reopen last closed buffer in vertical split
+nnoremap <leader>rv :vs#<CR>
+
+"" Reopen last closed buffer in vertical split
+nnoremap <leader>rh :sp#<CR>
+
 "" Copy/Cut/Paste
 noremap YY "+y<CR>
 noremap <leader>p "+gP<CR>
