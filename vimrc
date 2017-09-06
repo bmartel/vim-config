@@ -14,9 +14,11 @@
 "------------------------------------------------------------------------------
 " GENERAL
 "------------------------------------------------------------------------------
-set encoding=utf-8            " Ensure encoding is UTF-8
-set nocompatible              " Disable Vi compatability
-set shell=/bin/bash           " Ensure bash is used for execution
+set encoding=utf-8                  " Ensure encoding is UTF-8
+set nocompatible                    " Disable Vi compatability
+set shell=/bin/bash                 " Ensure bash is used for execution
+set wildmode=list:longest,list:full " Ignore files in search
+set wildignore+=*/tmp/*,.tmp,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules,dist,build
 
 "------------------------------------------------------------------------------
 " VUNDLE CONFIG
@@ -57,6 +59,20 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " JAVASCRIPT CONFIG
 "------------------------------------------------------------------------------
 let g:javascript_enable_domhtmlcss = 1
+
+"------------------------------------------------------------------------------
+" NETRW CONFIG
+"------------------------------------------------------------------------------
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
+let g:netrw_list_hide = &wildignore
+augroup ProjectDrawer
+  autocmd!
+  autocmd VimEnter * :Vexplore
+augroup END
 
 "------------------------------------------------------------------------------
 " CTRL-P CONFIG
@@ -129,10 +145,6 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set expandtab
-
-"" ignore files in search
-set wildmode=list:longest,list:full
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules
 
 "" Disable visualbell
 set noerrorbells visualbell t_vb=
