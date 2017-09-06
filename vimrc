@@ -182,7 +182,7 @@ noremap <leader>v :<C-u>vsplit<CR>
 nnoremap <silent> <leader>f :Rgrep<CR>
 
 "" Open file browser
-nnoremap <silent> <leader>k :Ex<CR>
+nnoremap <silent> <leader>k :Vexplore<CR>
 
 "" search will center on the line it's found in.
 nnoremap n nzzzv
