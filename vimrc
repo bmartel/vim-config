@@ -18,7 +18,7 @@ set encoding=utf-8                  " Ensure encoding is UTF-8
 set nocompatible                    " Disable Vi compatability
 set shell=/bin/bash                 " Ensure bash is used for execution
 set wildmode=list:longest,list:full " Ignore files in search
-set wildignore+=*/tmp/*,.tmp,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules,dist,build
+set wildignore+=*/tmp/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules,dist,build
 
 "------------------------------------------------------------------------------
 " VUNDLE CONFIG
@@ -35,8 +35,10 @@ Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quot
 Plugin 'tpope/vim-sleuth'               " Autodetect spaces/tabs
 Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
 Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
+Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
 Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
+Plugin 'fatih/vim-go'                " Customized take on atoms one dark
 call vundle#end()                       " Complete vunde initialization
 
 "" enable filetype detection
@@ -47,8 +49,8 @@ filetype plugin indent on
 " GREP CONFIG
 "------------------------------------------------------------------------------
 let Grep_Default_Options = '-IR'
-let Grep_Skip_Files = '*.log *.db'
-let Grep_Skip_Dirs = '.git node_modules'
+let Grep_Skip_Files = '*.log *.db *.zip *.pyc *.so *.swp'
+let Grep_Skip_Dirs = '.git .nuxt node_modules bower_components public_html dist vendor bundle .tmp'
 
 "------------------------------------------------------------------------------
 " EDITORCONFIG
@@ -86,6 +88,10 @@ let g:ctrlp_map = '<leader>l'
 "" The Silver Searcher
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
+  unlet g:ctrlp_user_command
+  let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.nuxt$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
+    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
@@ -227,8 +233,11 @@ nnoremap <silent> <leader>b :Buffers<CR>
 noremap <leader>q :bp<CR>
 noremap <leader>w :bn<CR>
 
-"" Close buffer
+"" Close current buffer
 noremap <leader>c :bd<CR>
+
+"" Close all buffers
+noremap <leader>ac :%bd<CR>
 
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
