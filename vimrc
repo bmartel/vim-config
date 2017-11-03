@@ -18,7 +18,7 @@ set encoding=utf-8                  " Ensure encoding is UTF-8
 set nocompatible                    " Disable Vi compatability
 set shell=/bin/bash                 " Ensure bash is used for execution
 set wildmode=list:longest,list:full " Ignore files in search
-set wildignore+=*/tmp/*,.tmp,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules,dist,build
+set wildignore+=*/tmp/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules,dist,build
 
 "------------------------------------------------------------------------------
 " VUNDLE CONFIG
@@ -38,7 +38,7 @@ Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
 Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
 Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
-"Plugin 'fatih/vim-go'                " Customized take on atoms one dark
+"Plugin 'fatih/vim-go'                  " Go Tools
 call vundle#end()                       " Complete vunde initialization
 
 "" enable filetype detection
@@ -49,8 +49,8 @@ filetype plugin indent on
 " GREP CONFIG
 "------------------------------------------------------------------------------
 let Grep_Default_Options = '-IR'
-let Grep_Skip_Files = '*.log *.db *.exe *.so *.dll *.pyc .DS_STORE'
-let Grep_Skip_Dirs = '.git node_modules bower_components public_html dist vendor bundle .tmp storage project_files'
+let Grep_Skip_Files = '*.log *.db *.exe *.so *.dll *.pyc *.swp *.zip .DS_STORE'
+let Grep_Skip_Dirs = '.git .nuxt node_modules bower_components public_html dist vendor bundle .tmp storage project_files'
 
 "------------------------------------------------------------------------------
 " EDITORCONFIG
