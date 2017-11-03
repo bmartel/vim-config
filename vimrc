@@ -32,7 +32,6 @@ Plugin 'vim-scripts/grep.vim'           " Grep search of files
 Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
 Plugin 'tpope/vim-fugitive'             " Help formatting commit messages
 Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
-Plugin 'tpope/vim-sleuth'               " Autodetect spaces/tabs
 Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
 Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
 Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
@@ -153,10 +152,10 @@ set splitright                     " split panes to the right
 set autoindent
 set smartindent
 set smarttab
+set expandtab
 set tabstop=2
 set softtabstop=2
-set shiftwidth=0
-set expandtab
+set shiftwidth=2
 
 "" Disable visualbell
 set noerrorbells visualbell t_vb=
