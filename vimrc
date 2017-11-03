@@ -35,8 +35,10 @@ Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quot
 Plugin 'tpope/vim-sleuth'               " Autodetect spaces/tabs
 Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
 Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
+Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
 Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
+"Plugin 'fatih/vim-go'                " Customized take on atoms one dark
 call vundle#end()                       " Complete vunde initialization
 
 "" enable filetype detection
@@ -47,8 +49,8 @@ filetype plugin indent on
 " GREP CONFIG
 "------------------------------------------------------------------------------
 let Grep_Default_Options = '-IR'
-let Grep_Skip_Files = '*.log *.db'
-let Grep_Skip_Dirs = '.git node_modules'
+let Grep_Skip_Files = '*.log *.db *.exe *.so *.dll *.pyc .DS_STORE'
+let Grep_Skip_Dirs = '.git node_modules bower_components public_html dist vendor bundle .tmp storage project_files'
 
 "------------------------------------------------------------------------------
 " EDITORCONFIG
@@ -82,10 +84,16 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 let g:ctrlp_show_hidden = 1        " include hidden files in results
 let g:ctrlp_working_path_mode = '' " stop setting git repo as root path
 let g:ctrlp_map = '<leader>l'
+let g:ctrlp_max_files = 0
+let g:ctrlp_max_depth=15
 
 "" The Silver Searcher
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
+  unlet g:ctrlp_user_command
+  let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
+    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$|\.DS_STORE$' }
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
@@ -93,7 +101,11 @@ endif
 "" ripgrep
 if executable('rg')
   set grepprg=rg\ --vimgrep
-  let g:ctrlp_user_command = 'rg --files --hidden --follow --glob "!.git/*"'
+  unlet g:ctrlp_user_command
+  let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
+    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$|\.DS_STORE$' }
+  let g:ctrlp_user_command = 'rg --files %s'
   let g:ctrlp_use_caching = 0
 endif
 
@@ -143,7 +155,7 @@ set smartindent
 set smarttab
 set tabstop=2
 set softtabstop=2
-set shiftwidth=2
+set shiftwidth=0
 set expandtab
 
 "" Disable visualbell
@@ -227,8 +239,11 @@ nnoremap <silent> <leader>b :Buffers<CR>
 noremap <leader>q :bp<CR>
 noremap <leader>w :bn<CR>
 
-"" Close buffer
+"" Close current buffer
 noremap <leader>c :bd<CR>
+
+"" Close all buffers
+noremap <leader>ac :%bd<CR>
 
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
