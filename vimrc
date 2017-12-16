@@ -31,13 +31,15 @@ Plugin 'ctrlpvim/ctrlp.vim'             " Quick file navigation
 Plugin 'vim-scripts/grep.vim'           " Grep search of files
 Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
 Plugin 'tpope/vim-fugitive'             " Help formatting commit messages
+Plugin 'airblade/vim-gitgutter'         " Git changes status gutter
 Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
 Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
+Plugin 'kchmck/vim-coffee-script'       " Coffeescript syntax highlighting
 Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
+Plugin 'mattn/emmet-vim'                " Emmet html completion
 Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
 Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
-"Plugin 'fatih/vim-go'                  " Go Tools
 call vundle#end()                       " Complete vunde initialization
 
 "" enable filetype detection
@@ -68,7 +70,7 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
-let g:netrw_winsize = 25
+let g:netrw_winsize = 15
 let g:netrw_list_hide = &wildignore
 augroup ProjectDrawer
   autocmd!
@@ -84,15 +86,15 @@ let g:ctrlp_show_hidden = 1        " include hidden files in results
 let g:ctrlp_working_path_mode = '' " stop setting git repo as root path
 let g:ctrlp_map = '<leader>l'
 let g:ctrlp_max_files = 0
-let g:ctrlp_max_depth=15
+let g:ctrlp_max_depth=10
 
 "" The Silver Searcher
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   unlet g:ctrlp_user_command
   let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
-    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$|\.DS_STORE$' }
+    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.nuxt$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
+    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
@@ -102,7 +104,7 @@ if executable('rg')
   set grepprg=rg\ --vimgrep
   unlet g:ctrlp_user_command
   let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
+    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.nuxt$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
     \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$|\.DS_STORE$' }
   let g:ctrlp_user_command = 'rg --files %s'
   let g:ctrlp_use_caching = 0
@@ -112,6 +114,7 @@ endif
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
 syntax on                           " enable syntax highlighting
+set number                          " enable line numbers
 colorscheme one                     " set color scheme
 set background=dark                 " assume a dark background
 set ruler                           " show ruler in lower right
@@ -243,6 +246,7 @@ noremap <leader>c :bd<CR>
 
 "" Close all buffers
 noremap <leader>ac :%bd<CR>
+noremap <leader>oc :%bd<CR><C-O>:bd#<CR>
 
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
