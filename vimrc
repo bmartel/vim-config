@@ -34,12 +34,14 @@ Plugin 'tpope/vim-fugitive'             " Help formatting commit messages
 Plugin 'airblade/vim-gitgutter'         " Git changes status gutter
 Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
 Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
+Plugin 'mxw/vim-jsx'                    " React jsx syntax
+Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
 Plugin 'kchmck/vim-coffee-script'       " Coffeescript syntax highlighting
 Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
 Plugin 'mattn/emmet-vim'                " Emmet html completion
-Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
 Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
+" Plugin 'trevordmiller/nova-vim'         " Nova color scheme
 call vundle#end()                       " Complete vunde initialization
 
 "" enable filetype detection
@@ -62,6 +64,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " JAVASCRIPT CONFIG
 "------------------------------------------------------------------------------
 let g:javascript_enable_domhtmlcss = 1
+let g:jsx_ext_required = 0
 
 "------------------------------------------------------------------------------
 " NETRW CONFIG
