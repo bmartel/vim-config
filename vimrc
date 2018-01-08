@@ -2,7 +2,6 @@
 "------------------------------------------------------------------------------
 "           .----. .-.   .-.  .--.  .----.  .---. .----..-.
 "           | {}  }|  `.'  | / {} \ | {}  }{_   _}| {_  | |
-"           | {}  }| |\ /| |/  /\  \| .-. \  | |  | {__ | `--.
 "           `----' `-' ` `-'`-'  `-'`-' `-'  `-'  `----'`----'
 "           .-. .-..-..-.   .-. .---.  .----. .-. .-..----..-. .---.
 "           | | | || ||  `.'  |/  ___}/  {}  \|  `| || {_  | |/   __}
@@ -27,6 +26,8 @@ filetype off
 set rtp+=$HOME/.vim/bundle/Vundle.vim   " Set the runtime path to include Vundle
 call vundle#begin()                     " Initialize vundle
 Plugin 'gmarik/vundle'                  " Let Vundle manage Vundle
+Plugin 'scrooloose/nerdtree'            " Sidebar file tree
+Plugin 'jlanzarotta/bufexplorer'        " Buffer explorer
 Plugin 'ctrlpvim/ctrlp.vim'             " Quick file navigation
 Plugin 'vim-scripts/grep.vim'           " Grep search of files
 Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
@@ -41,7 +42,6 @@ Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
 Plugin 'mattn/emmet-vim'                " Emmet html completion
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
 Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
-" Plugin 'trevordmiller/nova-vim'         " Nova color scheme
 call vundle#end()                       " Complete vunde initialization
 
 "" enable filetype detection
@@ -67,18 +67,26 @@ let g:javascript_enable_domhtmlcss = 1
 let g:jsx_ext_required = 0
 
 "------------------------------------------------------------------------------
+" NERDTREE CONFIG
+"------------------------------------------------------------------------------
+let NERDTreeQuitOnOpen = 1
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+
+"------------------------------------------------------------------------------
 " NETRW CONFIG
 "------------------------------------------------------------------------------
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 15
-let g:netrw_list_hide = &wildignore
-augroup ProjectDrawer
-  autocmd!
-  autocmd VimEnter * :Vexplore
-augroup END
+" let g:netrw_banner = 0
+" let g:netrw_liststyle = 3
+" let g:netrw_browse_split = 4
+" let g:netrw_altv = 1
+" let g:netrw_winsize = 15
+" let g:netrw_list_hide = &wildignore
+" augroup ProjectDrawer
+"   autocmd!
+"   autocmd VimEnter * :Vexplore
+" augroup END
 
 "------------------------------------------------------------------------------
 " CTRL-P CONFIG
@@ -131,7 +139,7 @@ set cursorline
 set guioptions=egmrti
 
 if has("gui_mac") || has("gui_macvim")
-  set guifont=Envy\ Code\ R:h14
+  set guifont=Envy\ Code\ R:h15
   set transparency=0 " disable transparency
 endif
 
@@ -192,14 +200,16 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 "" Split windows
-noremap <leader>h :<C-u>split<CR>
-noremap <leader>v :<C-u>vsplit<CR>
+noremap <leader>sh :<C-u>split<CR>
+noremap <leader>sv :<C-u>vsplit<CR>
 
 "" Search in files
 nnoremap <silent> <leader>f :Rgrep<CR>
 
 "" Open file browser
-nnoremap <silent> <leader>k :Vexplore<CR>
+" nnoremap <silent> <leader>k :Vexplore<CR>
+nnoremap <leader>tt :NERDTreeToggle<Enter>
+nnoremap <silent> <leader>k :NERDTreeFind<CR>
 
 "" search will center on the line it's found in.
 nnoremap n nzzzv
@@ -238,7 +248,7 @@ if has('macunix')
 endif
 
 "" Show buffer list
-nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>b :buffers<CR>
 
 "" Buffer nav
 noremap <leader>q :bp<CR>
