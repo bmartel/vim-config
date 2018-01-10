@@ -17,7 +17,7 @@ set encoding=utf-8                  " Ensure encoding is UTF-8
 set nocompatible                    " Disable Vi compatability
 set shell=/bin/bash                 " Ensure bash is used for execution
 set wildmode=list:longest,list:full " Ignore files in search
-set wildignore+=*/tmp/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,__pycache__,node_modules,dist,build
+set wildignore+=*/tmp/*,env/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,*/__pycache__/*,*/site-packages/*,node_modules,dist,build
 
 "------------------------------------------------------------------------------
 " VUNDLE CONFIG
@@ -30,6 +30,7 @@ Plugin 'scrooloose/nerdtree'            " Sidebar file tree
 Plugin 'jlanzarotta/bufexplorer'        " Buffer explorer
 Plugin 'ctrlpvim/ctrlp.vim'             " Quick file navigation
 Plugin 'vim-scripts/grep.vim'           " Grep search of files
+Plugin 'mtth/scratch.vim'               " Quick scratch buffer
 Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
 Plugin 'tpope/vim-fugitive'             " Help formatting commit messages
 Plugin 'airblade/vim-gitgutter'         " Git changes status gutter
@@ -52,8 +53,8 @@ filetype plugin indent on
 " GREP CONFIG
 "------------------------------------------------------------------------------
 let Grep_Default_Options = '-IR'
-let Grep_Skip_Files = '*.log *.db *.exe *.so *.dll *.pyc *.swp *.zip .DS_STORE'
-let Grep_Skip_Dirs = '.git .nuxt node_modules bower_components public_html dist vendor bundle .tmp storage project_files'
+let Grep_Skip_Files = '*.log *.db *.exe *.so *.dll *.pyc *.swp *.zip *.DS_STORE'
+let Grep_Skip_Dirs = '.git .nuxt env __pycache__ node_modules bower_components public_html dist vendor bundle .tmp storage project_files site-packages'
 
 "------------------------------------------------------------------------------
 " EDITORCONFIG
@@ -73,6 +74,13 @@ let NERDTreeQuitOnOpen = 1
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+let NERDTreeIgnore=['tmp$','\.tmp$','\.nuxt','env$','\.so$','\.swp$','\.zip$','\.pyc$','\.o$','\.obj$','\.git','\.rbc$','__pycache__','site-packages','node_modules','dist','build']
+
+"------------------------------------------------------------------------------
+" SCRATCH CONFIG
+"------------------------------------------------------------------------------
+let g:scratch_autohide = 1
+let g:scratch_insert_autohide = 1
 
 "------------------------------------------------------------------------------
 " NETRW CONFIG
@@ -104,7 +112,7 @@ if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   unlet g:ctrlp_user_command
   let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.nuxt$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
+    \ 'dir':  '\.git\|\.hg\|\.svn\|\.nuxt\|\.tmp\|env\|bower_components\|dist\|node_modules\|__pycache__\|site-packages\|project_files\|public_html\|storage',
     \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
   let g:ctrlp_use_caching = 0
@@ -115,7 +123,7 @@ if executable('rg')
   set grepprg=rg\ --vimgrep
   unlet g:ctrlp_user_command
   let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.nuxt$\|\.tmp$\|bower_components$\|dist$\|node_modules$\|project_files$\|public_html$\|storage$',
+    \ 'dir':  '\.git\|\.hg\|\.svn\|\.nuxt\|\.tmp\|env\|bower_components\|dist\|node_modules\|__pycache__\|site-packages\|project_files\|public_html\|storage',
     \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$|\.DS_STORE$' }
   let g:ctrlp_user_command = 'rg --files %s'
   let g:ctrlp_use_caching = 0
