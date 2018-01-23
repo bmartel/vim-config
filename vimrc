@@ -20,7 +20,7 @@ set wildmode=list:longest,list:full " Ignore files in search
 set wildignore+=*/tmp/*,env/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,*/__pycache__/*,*/site-packages/*,node_modules,dist,build
 set binary
 set noeol                           " No automatic end of line additionS
-
+set timeoutlen=1000 ttimeoutlen=0   " reduce timeout required for key to register
 "------------------------------------------------------------------------------
 " VUNDLE CONFIG
 "------------------------------------------------------------------------------
