@@ -2,6 +2,13 @@
 set -e
 shopt -s dotglob nullglob
 
+if [ -d $PWD/vim ]; then
+  echo "=== Local vim folder exists"
+else
+  echo "=== Creating local vim folder"
+  mkdir $PWD/vim
+fi
+
 if [ -e $HOME/.vimrc ] || [ -e $HOME/.vim ]; then
   today=$(date +%F)
   echo "=== Vim files detected, backing old ones up if not symlinked"
