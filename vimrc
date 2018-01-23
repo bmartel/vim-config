@@ -18,6 +18,8 @@ set nocompatible                    " Disable Vi compatability
 set shell=/bin/bash                 " Ensure bash is used for execution
 set wildmode=list:longest,list:full " Ignore files in search
 set wildignore+=*/tmp/*,env/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,*/__pycache__/*,*/site-packages/*,node_modules,dist,build
+set binary
+set noeol                           " No automatic end of line additionS
 
 "------------------------------------------------------------------------------
 " VUNDLE CONFIG
@@ -213,6 +215,8 @@ noremap <leader>sv :<C-u>vsplit<CR>
 
 "" Search in files
 nnoremap <silent> <leader>f :Rgrep<CR>
+nnoremap <silent> <leader>rr :cfdo %s//g<LEFT><LEFT>
+nnoremap <silent> <leader>ru :cfdo update<CR>
 
 "" Open file browser
 " nnoremap <silent> <leader>k :Vexplore<CR>
