@@ -31,7 +31,9 @@ call vundle#begin()                     " Initialize vundle
 Plugin 'gmarik/vundle'                  " Let Vundle manage Vundle
 Plugin 'scrooloose/nerdtree'            " Sidebar file tree
 Plugin 'jlanzarotta/bufexplorer'        " Buffer explorer
+Plugin 'terryma/vim-multiple-cursors'   " Add Sublime text style multiple cursors
 Plugin 'ctrlpvim/ctrlp.vim'             " Quick file navigation
+Plugin 'dyng/ctrlsf.vim'                " Sublime text style search window
 Plugin 'vim-scripts/grep.vim'           " Grep search of files
 Plugin 'mtth/scratch.vim'               " Quick scratch buffer
 Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
@@ -146,13 +148,20 @@ set list listchars=tab:\ \ ,trail:· " display tabs and trailing spaces
 
 set mousemodel=popup
 set t_Co=256
-set cursorline
+" set cursorline
 set guioptions=egmrti
 
+if has("gui_running")
+  if (match(system("uname -s"), "Darwin") != -1)
+    set guifont=Envy\ Code\ R:h14
+  else
+    set guifont=Envy\ Code\ R\ 12
+  end
+end
+
 if has("gui_mac") || has("gui_macvim")
-  set guifont=Envy\ Code\ R:h15
-  set transparency=0 " disable transparency
-endif
+  set transparency=0
+end
 
 "------------------------------------------------------------------------------
 " BEHAVIOUR
@@ -210,19 +219,27 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-"" Split windows
-noremap <leader>sh :<C-u>split<CR>
-noremap <leader>sv :<C-u>vsplit<CR>
+" "" Split windows: Just use the defaults C-w s|v
+" noremap <leader>h :<C-u>split<CR>
+" noremap <leader>v :<C-u>vsplit<CR>
 
 "" Search in files
-nnoremap <silent> <leader>f :Rgrep<CR>
+nmap     <leader>f <Plug>CtrlSFPrompt
+vmap     <leader>f <Plug>CtrlSFVwordPath
+vmap     <leader>F <Plug>CtrlSFVwordExec
+nmap     <leader>n <Plug>CtrlSFCwordPath
+nmap     <leader>p <Plug>CtrlSFPwordPath
+nnoremap <leader>of :CtrlSFOpen<CR>
+nnoremap <leader>tf :CtrlSFToggle<CR>
+inoremap <leader>tf <Esc>:CtrlSFToggle<CR>
+
 nnoremap <silent> <leader>rr :cfdo %s//g<LEFT><LEFT>
-nnoremap <silent> <leader>ru :cfdo update<CR>
+nnoremap <silent> <leader>ru :cfdo update
 
 "" Open file browser
 " nnoremap <silent> <leader>k :Vexplore<CR>
-nnoremap <leader>tt :NERDTreeToggle<Enter>
-nnoremap <silent> <leader>k :NERDTreeFind<CR>
+nnoremap <C-w>t :NERDTreeToggle<Enter>
+nnoremap <C-w>T :NERDTreeFind<CR>
 
 "" search will center on the line it's found in.
 nnoremap n nzzzv
