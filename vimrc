@@ -63,6 +63,18 @@ call vundle#end()                       " Complete vunde initialization
 filetype plugin indent on
 
 "------------------------------------------------------------------------------
+" FUNCTIONS
+"------------------------------------------------------------------------------
+"" Keep certain windows open when closing all others
+function! OnlyAndNerdtree()
+    let currentWindowID = win_getid()
+
+    windo if win_getid() != currentWindowID && &filetype != 'nerdtree' | close | endif
+endfunction
+
+command! Only call OnlyAndNerdtree()
+
+"------------------------------------------------------------------------------
 " ORGMODE CONFIG
 "------------------------------------------------------------------------------
 let g:org_agenda_files = ['~/Documents/tasks/*.org']
@@ -100,7 +112,7 @@ let g:typescript_indent_disable = 1
 "------------------------------------------------------------------------------
 " NERDTREE CONFIG
 "------------------------------------------------------------------------------
-let NERDTreeQuitOnOpen = 1
+let NERDTreeQuitOnOpen = 0
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
@@ -252,9 +264,17 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-" "" Split windows: Just use the defaults C-w s|v
+"" Close all other windows
+map <C-w>o :Only<CR>
+
+"" Resize windows: Use defaults ctrl-w <|> -|+
+
+"" Split windows: Just use the defaults C-w s|v
 " noremap <leader>h :<C-u>split<CR>
 " noremap <leader>v :<C-u>vsplit<CR>
+
+"" Close all other windows
+map <C-w>o :Only<CR>
 
 "" Search in files
 nmap     <leader>f <Plug>CtrlSFPrompt
