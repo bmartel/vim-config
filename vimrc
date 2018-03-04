@@ -22,6 +22,8 @@ set wildignore+=*/tmp/*,env/*,.tmp,.nuxt,public_html,vendor,bower_components,*.s
 set binary
 set noeol                           " No automatic end of line additionS
 set timeoutlen=1000 ttimeoutlen=0   " reduce timeout required for key to register
+set hidden
+set gdefault
 "------------------------------------------------------------------------------
 " VUNDLE CONFIG
 "------------------------------------------------------------------------------
@@ -38,9 +40,13 @@ Plugin 'vim-scripts/grep.vim'           " Grep search of files
 Plugin 'mtth/scratch.vim'               " Quick scratch buffer
 Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
 Plugin 'tpope/vim-fugitive'             " Help formatting commit messages
+Plugin 'tpope/vim-speeddating'          " Date formatting plugin
 Plugin 'airblade/vim-gitgutter'         " Git changes status gutter
 Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
 Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
+Plugin 'leafgarland/typescript-vim'     " Typescript syntax highlighting
+Plugin 'prettier/vim-prettier'          " Pretty print autoformatting
+Plugin 'kshenoy/vim-signature'          " Vim marks easier bindings and highlights
 Plugin 'mxw/vim-jsx'                    " React jsx syntax
 Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
 Plugin 'kchmck/vim-coffee-script'       " Coffeescript syntax highlighting
@@ -48,11 +54,18 @@ Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
 Plugin 'mattn/emmet-vim'                " Emmet html completion
 Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
 Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
+Plugin 'colepeters/spacemacs-theme.vim' " spacemacs theme!
+Plugin 'jceb/vim-orgmode'               " Task manager
 call vundle#end()                       " Complete vunde initialization
 
 "" enable filetype detection
 "" and indent detection (based on filetype)
 filetype plugin indent on
+
+"------------------------------------------------------------------------------
+" ORGMODE CONFIG
+"------------------------------------------------------------------------------
+let g:org_agenda_files = ['~/Documents/tasks/*.org']
 
 "------------------------------------------------------------------------------
 " GREP CONFIG
@@ -67,10 +80,22 @@ let Grep_Skip_Dirs = '.git .nuxt env __pycache__ node_modules bower_components p
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 "------------------------------------------------------------------------------
+" PRETTIER CONFIG
+"------------------------------------------------------------------------------
+let g:prettier#exec_cmd_async = 1
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+
+"------------------------------------------------------------------------------
 " JAVASCRIPT CONFIG
 "------------------------------------------------------------------------------
 let g:javascript_enable_domhtmlcss = 1
 let g:jsx_ext_required = 0
+
+"------------------------------------------------------------------------------
+" TYPESCRIPT CONFIG
+"------------------------------------------------------------------------------
+let g:typescript_indent_disable = 1
 
 "------------------------------------------------------------------------------
 " NERDTREE CONFIG
@@ -139,17 +164,24 @@ endif
 "------------------------------------------------------------------------------
 syntax on                           " enable syntax highlighting
 set number                          " enable line numbers
-colorscheme one                     " set color scheme
-set background=dark                 " assume a dark background
+" colorscheme one                     " set color scheme
+" set background=dark                 " assume a dark background
 set ruler                           " show ruler in lower right
 set hlsearch                        " highlight all search results
 let loaded_matchparen=1             " turn off match paren highlighting
 set list listchars=tab:\ \ ,trail:· " display tabs and trailing spaces
 
+if (has("termguicolors"))
+  set termguicolors
+endif
+
+set background=dark
+colorscheme spacemacs-theme
+
 set mousemodel=popup
 set t_Co=256
 " set cursorline
-set guioptions=egmrti
+set guioptions=
 
 if has("gui_running")
   if (match(system("uname -s"), "Darwin") != -1)
@@ -212,6 +244,7 @@ set scrolloff=3
 " MAPPINGS
 "------------------------------------------------------------------------------
 let mapleader = "," " Use better map leader
+let maplocalleader = "\\" " Use better map local leader
 
 "" Change windows
 map <C-h> <C-w>h
