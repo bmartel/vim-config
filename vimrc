@@ -20,43 +20,53 @@ set shell=/bin/bash                 " Ensure bash is used for execution
 set wildmode=list:longest,list:full " Ignore files in search
 set wildignore+=*/tmp/*,env/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,*/__pycache__/*,*/site-packages/*,node_modules,dist,build
 set binary
-set noeol                           " No automatic end of line additionS
+set noeol                           " No automatic end of line additions
 set timeoutlen=1000 ttimeoutlen=0   " reduce timeout required for key to register
 set hidden
-set gdefault
+
 "------------------------------------------------------------------------------
-" VUNDLE CONFIG
+" PlUGIN CONFIG
 "------------------------------------------------------------------------------
+if has("nvim")
+  let pluginPath = '~/.vim/plugged'
+else
+  let pluginPath = '~/.config/nvim/plugged'
+endif
+
 filetype off
-set rtp+=$HOME/.vim/bundle/Vundle.vim   " Set the runtime path to include Vundle
-call vundle#begin()                     " Initialize vundle
-Plugin 'gmarik/vundle'                  " Let Vundle manage Vundle
-Plugin 'scrooloose/nerdtree'            " Sidebar file tree
-Plugin 'jlanzarotta/bufexplorer'        " Buffer explorer
-Plugin 'terryma/vim-multiple-cursors'   " Add Sublime text style multiple cursors
-Plugin 'ctrlpvim/ctrlp.vim'             " Quick file navigation
-Plugin 'dyng/ctrlsf.vim'                " Sublime text style search window
-Plugin 'vim-scripts/grep.vim'           " Grep search of files
-Plugin 'mtth/scratch.vim'               " Quick scratch buffer
-Plugin 'tpope/vim-commentary'           " Quickly comment lines out and in
-Plugin 'tpope/vim-fugitive'             " Help formatting commit messages
-Plugin 'tpope/vim-speeddating'          " Date formatting plugin
-Plugin 'airblade/vim-gitgutter'         " Git changes status gutter
-Plugin 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
-Plugin 'pangloss/vim-javascript'        " Javascript syntax highlighting
-Plugin 'leafgarland/typescript-vim'     " Typescript syntax highlighting
-Plugin 'prettier/vim-prettier'          " Pretty print autoformatting
-Plugin 'kshenoy/vim-signature'          " Vim marks easier bindings and highlights
-Plugin 'mxw/vim-jsx'                    " React jsx syntax
-Plugin 'posva/vim-vue'                  " Vue file syntax highlighting
-Plugin 'kchmck/vim-coffee-script'       " Coffeescript syntax highlighting
-Plugin 'lumiliet/vim-twig'              " Twig template syntax highlighting
-Plugin 'mattn/emmet-vim'                " Emmet html completion
-Plugin 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
-Plugin 'bmartel/vim-one'                " Customized take on atoms one dark
-Plugin 'colepeters/spacemacs-theme.vim' " spacemacs theme!
-Plugin 'jceb/vim-orgmode'               " Task manager
-call vundle#end()                       " Complete vunde initialization
+
+call plug#begin(pluginPath)
+Plug 'scrooloose/nerdtree'            " Sidebar file tree
+Plug 'jlanzarotta/bufexplorer'        " Buffer explorer
+Plug 'terryma/vim-multiple-cursors'   " Add Sublime text style multiple cursors
+Plug 'ctrlpvim/ctrlp.vim'             " Quick file navigation
+Plug 'dyng/ctrlsf.vim'                " Sublime text style search window
+Plug 'vim-scripts/grep.vim'           " Grep search of files
+Plug 'mtth/scratch.vim'               " Quick scratch buffer
+Plug 'tpope/vim-commentary'           " Quickly comment lines out and in
+Plug 'airblade/vim-gitgutter'         " Git changes status gutter
+Plug 'tpope/vim-fugitive'             " Help formatting commit messages
+Plug 'tpope/vim-speeddating'          " Date formatting Plug
+Plug 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
+Plug 'pangloss/vim-javascript'        " Javascript syntax highlighting
+Plug 'leafgarland/typescript-vim'     " Typescript syntax highlighting
+Plug 'prettier/vim-prettier'          " Pretty print autoformatting
+Plug 'kshenoy/vim-signature'          " Vim marks easier bindings and highlights
+Plug 'mxw/vim-jsx'                    " React jsx syntax
+Plug 'posva/vim-vue'                  " Vue file syntax highlighting
+Plug 'kchmck/vim-coffee-script'       " Coffeescript syntax highlighting
+Plug 'lumiliet/vim-twig'              " Twig template syntax highlighting
+Plug 'mattn/emmet-vim'                " Emmet html completion
+Plug 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
+Plug 'bmartel/vim-one'                " Customized take on atoms one dark
+Plug 'colepeters/spacemacs-theme.vim' " spacemacs theme!
+Plug 'jceb/vim-orgmode'               " Task manager
+if has("nvim")
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  packadd matchit
+endif
+call plug#end()                       " Complete vunde initialization
 
 "" enable filetype detection
 "" and indent detection (based on filetype)
@@ -67,12 +77,18 @@ filetype plugin indent on
 "------------------------------------------------------------------------------
 "" Keep certain windows open when closing all others
 function! OnlyAndNerdtree()
-    let currentWindowID = win_getid()
+  let currentWindowID = win_getid()
 
-    windo if win_getid() != currentWindowID && &filetype != 'nerdtree' | close | endif
+  windo if win_getid() != currentWindowID && &filetype != 'nerdtree' && &filetype != 'org' | close | endif
+  call win_gotoid(currentWindowID)
 endfunction
 
 command! Only call OnlyAndNerdtree()
+
+"------------------------------------------------------------------------------
+" DEOPLETE CONFIG
+"------------------------------------------------------------------------------
+let g:deoplete#enable_at_startup = 1
 
 "------------------------------------------------------------------------------
 " ORGMODE CONFIG
@@ -94,9 +110,9 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "------------------------------------------------------------------------------
 " PRETTIER CONFIG
 "------------------------------------------------------------------------------
-let g:prettier#exec_cmd_async = 1
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+" let g:prettier#exec_cmd_async = 1
+" let g:prettier#autoformat = 0
+" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
 
 "------------------------------------------------------------------------------
 " JAVASCRIPT CONFIG
@@ -176,8 +192,10 @@ endif
 "------------------------------------------------------------------------------
 syntax on                           " enable syntax highlighting
 set number                          " enable line numbers
-" colorscheme one                     " set color scheme
-" set background=dark                 " assume a dark background
+colorscheme one                     " set color scheme
+set background=dark                 " assume a dark background
+" set background=dark
+" colorscheme spacemacs-theme
 set ruler                           " show ruler in lower right
 set hlsearch                        " highlight all search results
 let loaded_matchparen=1             " turn off match paren highlighting
@@ -186,9 +204,6 @@ set list listchars=tab:\ \ ,trail:· " display tabs and trailing spaces
 if (has("termguicolors"))
   set termguicolors
 endif
-
-set background=dark
-colorscheme spacemacs-theme
 
 set mousemodel=popup
 set t_Co=256
@@ -200,12 +215,12 @@ if has("gui_running")
     set guifont=Envy\ Code\ R:h14
   else
     set guifont=Envy\ Code\ R\ 12
-  end
-end
+  endif
+endif
 
 if has("gui_mac") || has("gui_macvim")
   set transparency=0
-end
+endif
 
 "------------------------------------------------------------------------------
 " BEHAVIOUR
@@ -265,16 +280,13 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 "" Close all other windows
-map <C-w>o :Only<CR>
+nmap <C-w>o :Only<CR>
 
 "" Resize windows: Use defaults ctrl-w <|> -|+
 
 "" Split windows: Just use the defaults C-w s|v
 " noremap <leader>h :<C-u>split<CR>
 " noremap <leader>v :<C-u>vsplit<CR>
-
-"" Close all other windows
-map <C-w>o :Only<CR>
 
 "" Search in files
 nmap     <leader>f <Plug>CtrlSFPrompt
@@ -368,6 +380,11 @@ noremap <leader>ef :e <C-R>=expand("%:p:h") . "/" <CR>
 
 "" Open a tab emit command with the path of the currently edited file path filled
 noremap <leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+
+" Orgmode
+nnoremap <leader>op :60vsplit ~/Documents/tasks/personal.org<CR>
+nnoremap <leader>oh :60vsplit ~/Documents/tasks/home.org<CR>
+nnoremap <leader>ow :60vsplit ~/Documents/tasks/work.org<CR>
 
 " Git
 nnoremap <leader>gs :Gstatus<CR>
