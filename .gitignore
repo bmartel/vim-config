@@ -1,4 +1,5 @@
 vim/*
 nvim/*
+!nvim/init.vim
 .netrwhist
 .DS_STORE
