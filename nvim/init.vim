@@ -16,8 +16,6 @@
 "------------------------------------------------------------------------------
 set encoding=utf-8                  " Ensure encoding is UTF-8
 set nocompatible                    " Disable Vi compatability
-set wildmode=list:longest,list:full " Ignore files in search
-set wildignore+=*/tmp/*,env/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,*/__pycache__/*,*/site-packages/*,node_modules,dist,build
 set binary
 set noeol                           " No automatic end of line additions
 set timeoutlen=1000 ttimeoutlen=0   " reduce timeout required for key to register
@@ -137,7 +135,11 @@ let g:scratch_insert_autohide = 1
 "------------------------------------------------------------------------------
 " FZF CONFIG
 "------------------------------------------------------------------------------
+let $FZF_DEFAULT_COMMAND = 'rg --files'
 set grepprg=rg\ --vimgrep
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
@@ -236,7 +238,7 @@ nmap <C-w>o :Only<CR>
 
 "" Search in files
 nmap     <leader>l :Files<CR>
-nmap     <leader>L :Find
+nmap     <leader>L :Rg
 nmap     <leader>f <Plug>CtrlSFPrompt
 vmap     <leader>f <Plug>CtrlSFVwordPath
 vmap     <leader>F <Plug>CtrlSFVwordExec
