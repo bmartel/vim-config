@@ -16,7 +16,6 @@
 "------------------------------------------------------------------------------
 set encoding=utf-8                  " Ensure encoding is UTF-8
 set nocompatible                    " Disable Vi compatability
-set shell=/bin/bash                 " Ensure bash is used for execution
 set wildmode=list:longest,list:full " Ignore files in search
 set wildignore+=*/tmp/*,env/*,.tmp,.nuxt,public_html,vendor,bower_components,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.obj,.git,*.rbc,*/__pycache__/*,*/site-packages/*,node_modules,dist,build
 set binary
@@ -27,11 +26,7 @@ set hidden
 "------------------------------------------------------------------------------
 " PlUGIN CONFIG
 "------------------------------------------------------------------------------
-if has("nvim")
-  let pluginPath = '~/.vim/plugged'
-else
-  let pluginPath = '~/.config/nvim/plugged'
-endif
+let pluginPath = '~/.config/nvim/plugged'
 
 filetype off
 
@@ -39,7 +34,8 @@ call plug#begin(pluginPath)
 Plug 'scrooloose/nerdtree'            " Sidebar file tree
 Plug 'jlanzarotta/bufexplorer'        " Buffer explorer
 Plug 'terryma/vim-multiple-cursors'   " Add Sublime text style multiple cursors
-Plug 'ctrlpvim/ctrlp.vim'             " Quick file navigation
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'               " Quick fuzzy finder
 Plug 'dyng/ctrlsf.vim'                " Sublime text style search window
 Plug 'vim-scripts/grep.vim'           " Grep search of files
 Plug 'mtth/scratch.vim'               " Quick scratch buffer
@@ -61,11 +57,6 @@ Plug 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax se
 Plug 'bmartel/vim-one'                " Customized take on atoms one dark
 Plug 'colepeters/spacemacs-theme.vim' " spacemacs theme!
 Plug 'jceb/vim-orgmode'               " Task manager
-if has("nvim")
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  packadd matchit
-endif
 call plug#end()                       " Complete vunde initialization
 
 "" enable filetype detection
@@ -92,12 +83,6 @@ fu! OpenTerminal()
  resize 30
  :terminal
 endf
-
-au TermClose * exe "bd! " . expand('<abuf>')
-"------------------------------------------------------------------------------
-" DEOPLETE CONFIG
-"------------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
 
 "------------------------------------------------------------------------------
 " ORGMODE CONFIG
@@ -150,51 +135,15 @@ let g:scratch_autohide = 1
 let g:scratch_insert_autohide = 1
 
 "------------------------------------------------------------------------------
-" NETRW CONFIG
+" FZF CONFIG
 "------------------------------------------------------------------------------
-" let g:netrw_banner = 0
-" let g:netrw_liststyle = 3
-" let g:netrw_browse_split = 4
-" let g:netrw_altv = 1
-" let g:netrw_winsize = 15
-" let g:netrw_list_hide = &wildignore
-" augroup ProjectDrawer
-"   autocmd!
-"   autocmd VimEnter * :Vexplore
-" augroup END
-
-"------------------------------------------------------------------------------
-" CTRL-P CONFIG
-"------------------------------------------------------------------------------
-" ignore anything not tracked by git
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-let g:ctrlp_show_hidden = 1        " include hidden files in results
-let g:ctrlp_working_path_mode = '' " stop setting git repo as root path
-let g:ctrlp_map = '<leader>l'
-let g:ctrlp_max_files = 0
-let g:ctrlp_max_depth=10
-
-"" The Silver Searcher
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor
-  unlet g:ctrlp_user_command
-  let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git\|\.hg\|\.svn\|\.nuxt\|\.tmp\|env\|bower_components\|dist\|node_modules\|__pycache__\|site-packages\|project_files\|public_html\|storage',
-    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  let g:ctrlp_use_caching = 0
-endif
-
-"" ripgrep
-if executable('rg')
-  set grepprg=rg\ --vimgrep
-  unlet g:ctrlp_user_command
-  let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git\|\.hg\|\.svn\|\.nuxt\|\.tmp\|env\|bower_components\|dist\|node_modules\|__pycache__\|site-packages\|project_files\|public_html\|storage',
-    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$|\.DS_STORE$' }
-  let g:ctrlp_user_command = 'rg --files %s'
-  let g:ctrlp_use_caching = 0
-endif
+set grepprg=rg\ --vimgrep
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 
 "------------------------------------------------------------------------------
 " VISUAL CONFIG
@@ -218,18 +167,6 @@ set mousemodel=popup
 set t_Co=256
 " set cursorline
 set guioptions=
-
-if has("gui_running")
-  if (match(system("uname -s"), "Darwin") != -1)
-    set guifont=Envy\ Code\ R:h14
-  else
-    set guifont=Envy\ Code\ R\ 12
-  endif
-endif
-
-if has("gui_mac") || has("gui_macvim")
-  set transparency=0
-endif
 
 "------------------------------------------------------------------------------
 " BEHAVIOUR
@@ -298,6 +235,8 @@ nmap <C-w>o :Only<CR>
 " noremap <leader>v :<C-u>vsplit<CR>
 
 "" Search in files
+nmap     <leader>l :Files<CR>
+nmap     <leader>L :Find
 nmap     <leader>f <Plug>CtrlSFPrompt
 vmap     <leader>f <Plug>CtrlSFVwordPath
 vmap     <leader>F <Plug>CtrlSFVwordExec
@@ -361,11 +300,8 @@ noremap <leader>w :bn<CR>
 "" Close current buffer
 noremap <leader>c :bd<CR>
 
-"" Close current window
-noremap <leader>C :q<CR>
-
-"" Open terminal buffer
-nnoremap <leader>T :call OpenTerminal()<CR>
+"" Force Close current buffer
+noremap <leader>C :bd!<CR>
 
 "" Close all buffers
 noremap <leader>ac :%bd<CR>
@@ -400,6 +336,14 @@ noremap <leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>op :60vsplit ~/Documents/tasks/personal.org<CR>
 nnoremap <leader>oh :60vsplit ~/Documents/tasks/home.org<CR>
 nnoremap <leader>ow :60vsplit ~/Documents/tasks/work.org<CR>
+
+" Terminal
+nnoremap <leader>T :call OpenTerminal()<CR>
+tnoremap <Esc> <C-\><C-n>
+tnoremap <C-w>h <C-\><C-n><C-w>h
+tnoremap <C-w>j <C-\><C-n><C-w>j
+tnoremap <C-w>k <C-\><C-n><C-w>k
+tnoremap <C-w>l <C-\><C-n><C-w>l
 
 " Git
 nnoremap <leader>gs :Gstatus<CR>
