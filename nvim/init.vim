@@ -85,6 +85,15 @@ endfunction
 
 command! Only call OnlyAndNerdtree()
 
+fu! OpenTerminal()
+ " open split windows on the topleft
+ topleft split
+ " resize the height of terminal windows to 30
+ resize 30
+ :terminal
+endf
+
+au TermClose * exe "bd! " . expand('<abuf>')
 "------------------------------------------------------------------------------
 " DEOPLETE CONFIG
 "------------------------------------------------------------------------------
@@ -351,6 +360,12 @@ noremap <leader>w :bn<CR>
 
 "" Close current buffer
 noremap <leader>c :bd<CR>
+
+"" Close current window
+noremap <leader>C :q<CR>
+
+"" Open terminal buffer
+nnoremap <leader>T :call OpenTerminal()<CR>
 
 "" Close all buffers
 noremap <leader>ac :%bd<CR>
