@@ -35,10 +35,10 @@ Plug 'terryma/vim-multiple-cursors'   " Add Sublime text style multiple cursors
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'               " Quick fuzzy finder
 Plug 'dyng/ctrlsf.vim'                " Sublime text style search window
-Plug 'vim-scripts/grep.vim'           " Grep search of files
+" Plug 'vim-scripts/grep.vim'           " Grep search of files
 Plug 'mtth/scratch.vim'               " Quick scratch buffer
 Plug 'tpope/vim-commentary'           " Quickly comment lines out and in
-Plug 'airblade/vim-gitgutter'         " Git changes status gutter
+" Plug 'airblade/vim-gitgutter'         " Git changes status gutter
 Plug 'tpope/vim-fugitive'             " Help formatting commit messages
 Plug 'tpope/vim-speeddating'          " Date formatting Plug
 Plug 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
@@ -135,7 +135,6 @@ let g:scratch_insert_autohide = 1
 "------------------------------------------------------------------------------
 " FZF CONFIG
 "------------------------------------------------------------------------------
-let $FZF_DEFAULT_COMMAND = 'rg --files'
 set grepprg=rg\ --vimgrep
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
@@ -238,7 +237,7 @@ nmap <C-w>o :Only<CR>
 
 "" Search in files
 nmap     <leader>l :Files<CR>
-nmap     <leader>L :Rg
+nmap     <leader>L :Rg<SPACE>
 nmap     <leader>f <Plug>CtrlSFPrompt
 vmap     <leader>f <Plug>CtrlSFVwordPath
 vmap     <leader>F <Plug>CtrlSFVwordExec
