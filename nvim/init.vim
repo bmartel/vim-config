@@ -29,18 +29,14 @@ let pluginPath = '~/.config/nvim/plugged'
 filetype off
 
 call plug#begin(pluginPath)
-Plug 'scrooloose/nerdtree'            " Sidebar file tree
-Plug 'jlanzarotta/bufexplorer'        " Buffer explorer
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " Sidebar file tree
 Plug 'terryma/vim-multiple-cursors'   " Add Sublime text style multiple cursors
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'               " Quick fuzzy finder
 Plug 'dyng/ctrlsf.vim'                " Sublime text style search window
-" Plug 'vim-scripts/grep.vim'           " Grep search of files
 Plug 'mtth/scratch.vim'               " Quick scratch buffer
 Plug 'tpope/vim-commentary'           " Quickly comment lines out and in
-" Plug 'airblade/vim-gitgutter'         " Git changes status gutter
 Plug 'tpope/vim-fugitive'             " Help formatting commit messages
-Plug 'tpope/vim-speeddating'          " Date formatting Plug
 Plug 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
 Plug 'pangloss/vim-javascript'        " Javascript syntax highlighting
 Plug 'leafgarland/typescript-vim'     " Typescript syntax highlighting
@@ -177,6 +173,7 @@ autocmd BufLeave * silent! wall    " save on lost focus
 
 set autowrite                      " write before ':make' commands
 set wildmenu                       " show possible completions on command line
+set wildmode=full
 set backspace=indent,eol,start     " configure backspace behavior
 set textwidth=80                   " set width of all text
 
@@ -192,6 +189,8 @@ set splitright                     " split panes to the right
 set autoindent
 set smartindent
 set smarttab
+set lazyredraw
+set laststatus=2
 set expandtab
 set tabstop=2
 set softtabstop=2
@@ -217,8 +216,8 @@ set scrolloff=3
 "------------------------------------------------------------------------------
 " MAPPINGS
 "------------------------------------------------------------------------------
-let mapleader = "," " Use better map leader
-let maplocalleader = "\\" " Use better map local leader
+let mapleader      = ','
+let maplocalleader = ','
 
 "" Change windows
 map <C-h> <C-w>h
