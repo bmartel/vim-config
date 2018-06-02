@@ -26,32 +26,34 @@ set hidden
 "------------------------------------------------------------------------------
 let pluginPath = '~/.config/nvim/plugged'
 
-filetype off
-
 call plug#begin(pluginPath)
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " Sidebar file tree
-Plug 'terryma/vim-multiple-cursors'   " Add Sublime text style multiple cursors
+Plug 'terryma/vim-multiple-cursors'       " Add Sublime text style multiple cursors
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'               " Quick fuzzy finder
-Plug 'dyng/ctrlsf.vim'                " Sublime text style search window
-Plug 'mtth/scratch.vim'               " Quick scratch buffer
-Plug 'tpope/vim-commentary'           " Quickly comment lines out and in
-Plug 'tpope/vim-fugitive'             " Help formatting commit messages
-Plug 'tpope/vim-surround'             " Quickly change surrounding braces/quotes etc
-Plug 'pangloss/vim-javascript'        " Javascript syntax highlighting
-Plug 'leafgarland/typescript-vim'     " Typescript syntax highlighting
-Plug 'prettier/vim-prettier'          " Pretty print autoformatting
-Plug 'kshenoy/vim-signature'          " Vim marks easier bindings and highlights
-Plug 'mxw/vim-jsx'                    " React jsx syntax
-Plug 'posva/vim-vue'                  " Vue file syntax highlighting
-Plug 'kchmck/vim-coffee-script'       " Coffeescript syntax highlighting
-Plug 'lumiliet/vim-twig'              " Twig template syntax highlighting
-Plug 'mattn/emmet-vim'                " Emmet html completion
-Plug 'editorconfig/editorconfig-vim'  " Allow editorconfig to maintain syntax settings
-Plug 'bmartel/vim-one'                " Customized take on atoms one dark
-Plug 'colepeters/spacemacs-theme.vim' " spacemacs theme!
-Plug 'jceb/vim-orgmode'               " Task manager
-call plug#end()                       " Complete vunde initialization
+Plug 'junegunn/fzf.vim'                   " Quick fuzzy finder
+Plug 'dyng/ctrlsf.vim'                    " Sublime text style search window
+" Plug 'mtth/scratch.vim'                 " Quick scratch buffer
+Plug 'tpope/vim-commentary'               " Quickly comment lines out and in
+Plug 'tpope/vim-fugitive'                 " Help formatting commit messages
+Plug 'tpope/vim-surround'                 " Quickly change surrounding braces/quotes etc
+Plug 'w0rp/ale'                           " Async Linter
+Plug 'pangloss/vim-javascript'            " Javascript syntax highlighting
+" Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
+" Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
+" Plug 'prettier/vim-prettier'            " Pretty print autoformatting
+Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highlights
+Plug 'mxw/vim-jsx'                        " React jsx syntax
+" Plug 'posva/vim-vue'                    " Vue file syntax highlighting
+" Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
+" Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
+" Plug 'mattn/emmet-vim'                  " Emmet html completion
+Plug 'editorconfig/editorconfig-vim'      " Allow editorconfig to maintain syntax settings
+Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
+" Plug 'colepeters/spacemacs-theme.vim'   " spacemacs theme!
+" Plug 'jceb/vim-orgmode'                 " Task manager
+" Plug 'python-mode/python-mode', { 'branch': 'develop', 'for': 'python' } " Python ide
+" Plug 'mustache/vim-mustache-handlebars' " Handlebars syntax
+call plug#end()                           " Complete vunde initialization
 
 "" enable filetype detection
 "" and indent detection (based on filetype)
@@ -71,12 +73,30 @@ endfunction
 command! Only call OnlyAndNerdtree()
 
 fu! OpenTerminal()
- " open split windows on the topleft
- topleft split
- " resize the height of terminal windows to 30
- resize 30
+ " open split windows on the bottom
+ bottom split
+ " resize the height of terminal windows to 15
+ resize 15
  :terminal
 endf
+
+"------------------------------------------------------------------------------
+" PYTHON-MODE CONFIG
+"------------------------------------------------------------------------------
+set nofoldenable
+let g:python3_host_prog = '/usr/local/bin/python3'
+
+"------------------------------------------------------------------------------
+" RUBY CONFIG
+"------------------------------------------------------------------------------
+let g:ruby_path = '~/.rbenv/versions/2.5.1/bin/ruby'
+autocmd FileType ruby setlocal ts=2 sts=2 sw=2 foldmethod=manual norelativenumber nocursorline
+
+"------------------------------------------------------------------------------
+" ELM CONFIG
+"------------------------------------------------------------------------------
+let g:elm_format_autosave = 0
+let g:elm_setup_keybindings = 0
 
 "------------------------------------------------------------------------------
 " ORGMODE CONFIG
@@ -96,17 +116,25 @@ let Grep_Skip_Dirs = '.git .nuxt env __pycache__ node_modules bower_components p
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 "------------------------------------------------------------------------------
-" PRETTIER CONFIG
+" ALE CONFIG
 "------------------------------------------------------------------------------
+" let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'vue': ['prettier', 'eslint']}
+" let g:ale_fix_on_save = 1
+" let g:ale_linters_explicit = 1
 " let g:prettier#exec_cmd_async = 1
 " let g:prettier#autoformat = 0
-" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue PrettierAsync
 
 "------------------------------------------------------------------------------
 " JAVASCRIPT CONFIG
 "------------------------------------------------------------------------------
 let g:javascript_enable_domhtmlcss = 1
 let g:jsx_ext_required = 0
+
+"------------------------------------------------------------------------------
+" HANDLEBARS CONFIG
+"------------------------------------------------------------------------------
+let g:mustache_abbreviations = 1
 
 "------------------------------------------------------------------------------
 " TYPESCRIPT CONFIG
@@ -120,7 +148,9 @@ let NERDTreeQuitOnOpen = 0
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
-let NERDTreeIgnore=['tmp$','\.tmp$','\.nuxt','env$','\.so$','\.swp$','\.zip$','\.pyc$','\.o$','\.obj$','\.git','\.rbc$','__pycache__','site-packages','node_modules','dist','build']
+let NERDTreeIgnore=['tmp$','\.tmp$','\.nuxt','env$','\.so$','\.swp$','\.zip$','\.pyc$','\.o$','\.obj$','\.git','\.rbc$','__pycache__','site-packages','node_modules','dist']
+let g:NERDTreeMapOpenSplit = "s"
+let g:NERDTreeMapOpenVSplit = "v"
 
 "------------------------------------------------------------------------------
 " SCRATCH CONFIG
@@ -131,26 +161,25 @@ let g:scratch_insert_autohide = 1
 "------------------------------------------------------------------------------
 " FZF CONFIG
 "------------------------------------------------------------------------------
-set grepprg=rg\ --vimgrep
+set grepprg=ag\ --nogroup\ --nocolor
+
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
 
 "------------------------------------------------------------------------------
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
 syntax on                           " enable syntax highlighting
 set number                          " enable line numbers
-" colorscheme one                     " set color scheme
-" set background=dark                 " assume a dark background
-set background=dark
-colorscheme spacemacs-theme
+set background=dark                 " assume a dark background
+colorscheme one                     " set color scheme
+" colorscheme spacemacs-theme
 set ruler                           " show ruler in lower right
 set hlsearch                        " highlight all search results
 let loaded_matchparen=1             " turn off match paren highlighting
@@ -219,6 +248,9 @@ set scrolloff=3
 let mapleader      = ','
 let maplocalleader = ','
 
+"" Save file
+noremap <leader>s :update<CR>
+
 "" Change windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -227,7 +259,7 @@ map <C-l> <C-w>l
 
 "" Close all other windows
 nmap <C-w>o :Only<CR>
-
+nmap <C-w>c :enew<bar>bd #<CR>
 "" Resize windows: Use defaults ctrl-w <|> -|+
 
 "" Split windows: Just use the defaults C-w s|v
@@ -236,11 +268,11 @@ nmap <C-w>o :Only<CR>
 
 "" Search in files
 nmap     <leader>l :Files<CR>
-nmap     <leader>L :Rg<SPACE>
+nmap     <leader>L :Ag<SPACE>
 nmap     <leader>f <Plug>CtrlSFPrompt
 vmap     <leader>f <Plug>CtrlSFVwordPath
 vmap     <leader>F <Plug>CtrlSFVwordExec
-nmap     <leader>n <Plug>CtrlSFCwordPath
+" nmap     <leader>n <Plug>CtrlSFCwordPath
 nmap     <leader>p <Plug>CtrlSFPwordPath
 nnoremap <leader>of :CtrlSFOpen<CR>
 nnoremap <leader>tf :CtrlSFToggle<CR>
@@ -329,7 +361,7 @@ noremap <leader>md :!mkdir <C-R>=expand("%:p:h") . "/" <CR>
 "" Open an edit command with the path of the currently edited file path filled in
 noremap <leader>ef :e <C-R>=expand("%:p:h") . "/" <CR>
 
-"" Open a tab emit command with the path of the currently edited file path filled
+"" Open a tab edit command with the path of the currently edited file path filled
 noremap <leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 " Orgmode
@@ -344,6 +376,16 @@ tnoremap <C-w>h <C-\><C-n><C-w>h
 tnoremap <C-w>j <C-\><C-n><C-w>j
 tnoremap <C-w>k <C-\><C-n><C-w>k
 tnoremap <C-w>l <C-\><C-n><C-w>l
+
+" Elm
+nnoremap <leader>nm :ElmMake<CR>
+nnoremap <leader>nf :ElmFormat<CR>
+nnoremap <leader>nb :ElmMakeMain<CR>
+nnoremap <leader>nt :ElmTest<CR>
+nnoremap <leader>nr :ElmRepl<CR>
+nnoremap <leader>ne :ElmErrorDetail<CR>
+nnoremap <leader>nd :ElmShowDocs<CR>
+nnoremap <leader>nw :ElmBrowse<CR>
 
 " Git
 nnoremap <leader>gs :Gstatus<CR>
