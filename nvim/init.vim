@@ -203,7 +203,7 @@ command! -bang -nargs=* Rg
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
 syntax on                           " enable syntax highlighting
-set number                          " enable line numbers
+" set number                          " enable line numbers
 set background=dark                 " assume a dark background
 " colorscheme one                     " set color scheme
 " colorscheme spacemacs-theme
