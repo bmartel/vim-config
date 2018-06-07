@@ -32,6 +32,8 @@ Plug 'terryma/vim-multiple-cursors'       " Add Sublime text style multiple curs
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'                   " Quick fuzzy finder
 Plug 'dyng/ctrlsf.vim'                    " Sublime text style search window
+Plug 'SirVer/ultisnips'
+Plug 'bmartel/vim-snippets'               " Snippets!
 " Plug 'mtth/scratch.vim'                 " Quick scratch buffer
 Plug 'tpope/vim-commentary'               " Quickly comment lines out and in
 Plug 'tpope/vim-fugitive'                 " Help formatting commit messages
@@ -40,13 +42,12 @@ Plug 'w0rp/ale'                           " Async Linter
 Plug 'pangloss/vim-javascript'            " Javascript syntax highlighting
 " Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
 " Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
-" Plug 'prettier/vim-prettier'            " Pretty print autoformatting
 Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highlights
-Plug 'mxw/vim-jsx'                        " React jsx syntax
-" Plug 'posva/vim-vue'                    " Vue file syntax highlighting
+" Plug 'mxw/vim-jsx'                        " React jsx syntax
+Plug 'posva/vim-vue'                    " Vue file syntax highlighting
 " Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
 " Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
-" Plug 'mattn/emmet-vim'                  " Emmet html completion
+Plug 'mattn/emmet-vim'                  " Emmet html completion
 Plug 'editorconfig/editorconfig-vim'      " Allow editorconfig to maintain syntax settings
 Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
 " Plug 'colepeters/spacemacs-theme.vim'   " spacemacs theme!
@@ -79,6 +80,19 @@ fu! OpenTerminal()
  resize 15
  :terminal
 endf
+
+
+"------------------------------------------------------------------------------
+" EMMET CONFIG
+"------------------------------------------------------------------------------
+let g:user_emmet_expandabbr_key='<Tab>'
+
+"------------------------------------------------------------------------------
+" SNIPPETS CONFIG
+"------------------------------------------------------------------------------
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 
 "------------------------------------------------------------------------------
 " PYTHON-MODE CONFIG
@@ -118,9 +132,9 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "------------------------------------------------------------------------------
 " ALE CONFIG
 "------------------------------------------------------------------------------
-" let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'vue': ['prettier', 'eslint']}
-" let g:ale_fix_on_save = 1
-" let g:ale_linters_explicit = 1
+let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'vue': ['prettier', 'eslint']}
+let g:ale_fix_on_save = 1
+let g:ale_linters_explicit = 1
 " let g:prettier#exec_cmd_async = 1
 " let g:prettier#autoformat = 0
 " autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue PrettierAsync
@@ -159,18 +173,31 @@ let g:scratch_autohide = 1
 let g:scratch_insert_autohide = 1
 
 "------------------------------------------------------------------------------
+" CTRLSF CONFIG
+"------------------------------------------------------------------------------
+let g:ctrlsf_ackprg='pt'
+let g:ctrlsf_position = 'bottom'
+let g:ctrlsf_winsize = '100%'
+
+"------------------------------------------------------------------------------
 " FZF CONFIG
 "------------------------------------------------------------------------------
-set grepprg=ag\ --nogroup\ --nocolor
+set grepprg=rg\ --vimgrep
+let g:rg_command = 'rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" '
 
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+" command! -bang -nargs=? -complete=dir Files
+"   \ call fzf#vim#files(g:rg_command . <q-args>,
+"   \   <bang>0 ? fzf#vim#with_preview('up:60%')
+"   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+"   \   <bang>0)
 
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \ g:rg_command
+  \ . <q-args>, 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 
 "------------------------------------------------------------------------------
 " VISUAL CONFIG
@@ -268,7 +295,7 @@ nmap <C-w>c :enew<bar>bd #<CR>
 
 "" Search in files
 nmap     <leader>l :Files<CR>
-nmap     <leader>L :Ag<SPACE>
+nmap     <leader>L :Rg<SPACE>
 nmap     <leader>f <Plug>CtrlSFPrompt
 vmap     <leader>f <Plug>CtrlSFVwordPath
 vmap     <leader>F <Plug>CtrlSFVwordExec
@@ -292,6 +319,9 @@ nnoremap N Nzzzv
 
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<CR>
+
+"" Fix Emmet
+imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 
 "" Edit VIMRC
 nmap <silent> <leader>ev :edit $MYVIMRC<CR>
