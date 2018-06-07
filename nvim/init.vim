@@ -24,10 +24,9 @@ set hidden
 "------------------------------------------------------------------------------
 " PlUGIN CONFIG
 "------------------------------------------------------------------------------
-let pluginPath = '~/.config/nvim/plugged'
-
-call plug#begin(pluginPath)
+call plug#begin( '~/.config/nvim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " Sidebar file tree
+Plug 'itchyny/lightline.vim'              " Status bar
 Plug 'terryma/vim-multiple-cursors'       " Add Sublime text style multiple cursors
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'                   " Quick fuzzy finder
@@ -36,7 +35,7 @@ Plug 'SirVer/ultisnips'
 Plug 'bmartel/vim-snippets'               " Snippets!
 " Plug 'mtth/scratch.vim'                 " Quick scratch buffer
 Plug 'tpope/vim-commentary'               " Quickly comment lines out and in
-Plug 'tpope/vim-fugitive'                 " Help formatting commit messages
+" Plug 'tpope/vim-fugitive'                 " Help formatting commit messages
 Plug 'tpope/vim-surround'                 " Quickly change surrounding braces/quotes etc
 Plug 'w0rp/ale'                           " Async Linter
 Plug 'pangloss/vim-javascript'            " Javascript syntax highlighting
@@ -49,8 +48,10 @@ Plug 'posva/vim-vue'                    " Vue file syntax highlighting
 " Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
 Plug 'mattn/emmet-vim'                  " Emmet html completion
 Plug 'editorconfig/editorconfig-vim'      " Allow editorconfig to maintain syntax settings
-Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
+" Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
 " Plug 'colepeters/spacemacs-theme.vim'   " spacemacs theme!
+" Plug 'sonph/onehalf', {'rtp': 'vim/'}     " OneHalf the dark?
+Plug 'morhetz/gruvbox'                    " Easy on the eyes
 " Plug 'jceb/vim-orgmode'                 " Task manager
 " Plug 'python-mode/python-mode', { 'branch': 'develop', 'for': 'python' } " Python ide
 " Plug 'mustache/vim-mustache-handlebars' " Handlebars syntax
@@ -80,7 +81,6 @@ fu! OpenTerminal()
  resize 15
  :terminal
 endf
-
 
 "------------------------------------------------------------------------------
 " EMMET CONFIG
@@ -205,8 +205,16 @@ command! -bang -nargs=* Rg
 syntax on                           " enable syntax highlighting
 set number                          " enable line numbers
 set background=dark                 " assume a dark background
-colorscheme one                     " set color scheme
+" colorscheme one                     " set color scheme
 " colorscheme spacemacs-theme
+" colorscheme onehalfdark
+colorscheme gruvbox
+" let g:lightline = {
+"       \ 'colorscheme': 'onehalfdark',
+"       \ }
+let g:lightline = {
+      \ 'colorscheme': 'gruvbox',
+      \ }
 set ruler                           " show ruler in lower right
 set hlsearch                        " highlight all search results
 let loaded_matchparen=1             " turn off match paren highlighting
