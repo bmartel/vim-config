@@ -32,14 +32,16 @@ packadd minpac
 call minpac#init()
 
 call minpac#add('k-takata/minpac', {'type': 'opt'})
-call minpac#add('scrooloose/nerdtree')
+call minpac#add('scrooloose/nerdtree')                " Side bar navigation
 call minpac#add('itchyny/lightline.vim')              " Status bar
 call minpac#add('terryma/vim-multiple-cursors')       " Add Sublime text style multiple cursors
+call minpac#add('easymotion/vim-easymotion')          " Quick movemnet within files
 call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
 call minpac#add('junegunn/fzf.vim')                   " Quick fuzzy finder
-call minpac#add('brooth/far.vim')                    " Sublime text style search window
-call minpac#add('SirVer/ultisnips')
-call minpac#add('bmartel/vim-snippets')               " Snippets!
+call minpac#add('dyng/ctrlsf.vim')                    " Sublime text style search window
+call minpac#add('brooth/far.vim')
+call minpac#add('SirVer/ultisnips')                   " Snippets!
+call minpac#add('bmartel/vim-snippets')
 call minpac#add('tpope/vim-commentary')               " Quickly comment lines out and in
 call minpac#add('tpope/vim-fugitive')                 " Help formatting commit messages
 call minpac#add('tpope/vim-surround')                 " Quickly change surrounding braces/quotes etc
@@ -48,13 +50,13 @@ call minpac#add('christoomey/vim-sort-motion')        " Allows for quick line so
 call minpac#add('tommcdo/vim-exchange')               " Text object swapping
 call minpac#add('w0rp/ale')                           " Async Linter
 call minpac#add('pangloss/vim-javascript')            " Javascript syntax highlighting
-call minpac#add('posva/vim-vue')                    " Vue file syntax highlighting
-call minpac#add('kchmck/vim-coffee-script')         " Coffeescript syntax highlighting
-call minpac#add('lumiliet/vim-twig')                " Twig template syntax highlighting
-call minpac#add('mattn/emmet-vim')                  " Emmet html completion
+call minpac#add('posva/vim-vue')                      " Vue file syntax highlighting
+call minpac#add('kchmck/vim-coffee-script')           " Coffeescript syntax highlighting
+call minpac#add('lumiliet/vim-twig')                  " Twig template syntax highlighting
+call minpac#add('mattn/emmet-vim')                    " Emmet html completion
 call minpac#add('editorconfig/editorconfig-vim')      " Allow editorconfig to maintain syntax settings
 call minpac#add('bmartel/vim-one')                    " Customized take on atoms one dark
-call minpac#add('NovaDev94/lightline-onedark')
+call minpac#add('NovaDev94/lightline-onedark')        " Onedark lightline theme
 
 "------------------------------------------------------------------------------
 " FUNCTIONS
@@ -134,6 +136,11 @@ command! -bang -nargs=* Rg
   \   <bang>0)
 
 "------------------------------------------------------------------------------
+" CTRLSF CONFIG
+"------------------------------------------------------------------------------
+let g:ctrlsf_search_mode = 'async'
+
+"------------------------------------------------------------------------------
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
 set background=dark
@@ -176,7 +183,14 @@ autocmd BufWritePre * :%s/\s\+$//e " strip trailing whitespace on save
 autocmd BufLeave * silent! wall    " save on lost focus
 
 set backspace=indent,eol,start     " configure backspace behavior
-set textwidth=120                   " set width of all text
+set textwidth=120                  " set width of all text
+set noswapfile                     " disable swap files
+set nowb                           " disable writing backup
+
+set smartcase                      " ignore case if lower, otherwise match case
+
+set splitbelow                     " split panes on the bottom
+set splitright                     " split panes to the right
 
 "" indentation, spaces only, convert tabs
 set autoindent
@@ -216,7 +230,17 @@ nmap     <leader>F :Far<SPACE>
 nmap     <leader>R :Fardo<CR>
 nmap     <leader>U :Farundo<CR>
 
-:inoremap jj <Esc>
+nmap     <M-F>f <Plug>CtrlSFPrompt
+vmap     <M-F>f <Plug>CtrlSFVwordPath
+vmap     <M-F>F <Plug>CtrlSFVwordExec
+nmap     <M-F>n <Plug>CtrlSFCwordPath
+nmap     <M-F>p <Plug>CtrlSFPwordPath
+nnoremap <M-F>o :CtrlSFOpen<CR>
+nnoremap <M-F>t :CtrlSFToggle<CR>
+inoremap <M-F>t <Esc>:CtrlSFToggle<CR>
+
+inoremap jj <Esc>
+
 "" Open file browser
 " nnoremap <silent> <leader>k :Vexplore<CR>
 nnoremap <C-w>t :NERDTreeToggle<Enter>
@@ -317,7 +341,7 @@ nnoremap <leader>gr :Gread<CR>
 nnoremap <leader>gw :Gwrite<CR><CR>
 nnoremap <leader>go :Gbrowse<CR>
 nnoremap <leader>gm :Gmerge<CR>
-nnoremap <leader>gi :Gblame<CR>
+nnoremap <leader>gB :Gblame<CR>
 
 "" Abbreviations
 cnoreabbrev W! w!

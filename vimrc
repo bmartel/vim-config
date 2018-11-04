@@ -30,16 +30,17 @@ packadd matchit
 
 call minpac#init()
 
-" minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
 call minpac#add('k-takata/minpac', {'type': 'opt'})
-call minpac#add('scrooloose/nerdtree')
+call minpac#add('scrooloose/nerdtree')                " Side bar navigation
 call minpac#add('itchyny/lightline.vim')              " Status bar
 call minpac#add('terryma/vim-multiple-cursors')       " Add Sublime text style multiple cursors
+call minpac#add('easymotion/vim-easymotion')          " Quick movemnet within files
 call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
 call minpac#add('junegunn/fzf.vim')                   " Quick fuzzy finder
-call minpac#add('brooth/far.vim')                    " Sublime text style search window
-call minpac#add('SirVer/ultisnips')
-call minpac#add('bmartel/vim-snippets')               " Snippets!
+call minpac#add('dyng/ctrlsf.vim')                    " Sublime text style search window
+call minpac#add('brooth/far.vim')
+call minpac#add('SirVer/ultisnips')                   " Snippets!
+call minpac#add('bmartel/vim-snippets')
 call minpac#add('tpope/vim-commentary')               " Quickly comment lines out and in
 call minpac#add('tpope/vim-fugitive')                 " Help formatting commit messages
 call minpac#add('tpope/vim-surround')                 " Quickly change surrounding braces/quotes etc
@@ -48,13 +49,13 @@ call minpac#add('christoomey/vim-sort-motion')        " Allows for quick line so
 call minpac#add('tommcdo/vim-exchange')               " Text object swapping
 call minpac#add('w0rp/ale')                           " Async Linter
 call minpac#add('pangloss/vim-javascript')            " Javascript syntax highlighting
-call minpac#add('posva/vim-vue')                    " Vue file syntax highlighting
-call minpac#add('kchmck/vim-coffee-script')         " Coffeescript syntax highlighting
-call minpac#add('lumiliet/vim-twig')                " Twig template syntax highlighting
-call minpac#add('mattn/emmet-vim')                  " Emmet html completion
+call minpac#add('posva/vim-vue')                      " Vue file syntax highlighting
+call minpac#add('kchmck/vim-coffee-script')           " Coffeescript syntax highlighting
+call minpac#add('lumiliet/vim-twig')                  " Twig template syntax highlighting
+call minpac#add('mattn/emmet-vim')                    " Emmet html completion
 call minpac#add('editorconfig/editorconfig-vim')      " Allow editorconfig to maintain syntax settings
 call minpac#add('bmartel/vim-one')                    " Customized take on atoms one dark
-call minpac#add('NovaDev94/lightline-onedark')
+call minpac#add('NovaDev94/lightline-onedark')        " Onedark lightline theme
 
 "" enable filetype detection
 "" and indent detection (based on filetype)
@@ -147,12 +148,6 @@ let g:NERDTreeMapOpenVSplit = "v"
 set grepprg=rg\ --vimgrep
 let g:rg_command = 'rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" '
 
-" command! -bang -nargs=? -complete=dir Files
-"   \ call fzf#vim#files(g:rg_command . <q-args>,
-"   \   <bang>0 ? fzf#vim#with_preview('up:60%')
-"   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-"   \   <bang>0)
-
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \ g:rg_command
@@ -162,18 +157,23 @@ command! -bang -nargs=* Rg
   \   <bang>0)
 
 "------------------------------------------------------------------------------
+" CTRLSF CONFIG
+"------------------------------------------------------------------------------
+let g:ctrlsf_search_mode = 'async'
+
+"------------------------------------------------------------------------------
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
-syntax on                           " enable syntax highlighting
-set background=dark                 " starting background shade
-colorscheme one                     " set color scheme
+syntax on
+set background=dark
+colorscheme one
 let g:lightline = {
       \ 'colorscheme': 'onedark',
       \ }
-set ruler                           " show ruler in lower right
-set hlsearch                        " highlight all search results
-let loaded_matchparen=1             " turn off match paren highlighting
-set list listchars=tab:\ \ ,trail:· " display tabs and trailing spaces
+set ruler
+set hlsearch
+let loaded_matchparen=1
+set list listchars=tab:\ \ ,trail:·
 
 if (has("termguicolors"))
   set termguicolors
@@ -184,7 +184,7 @@ let &t_Co=256
 if &term =~ '256color'
   set t_ut=
 endif
-" set cursorline
+set nocursorline
 set guioptions=
 
 "" Disable visualbell
@@ -254,8 +254,16 @@ nmap     <leader>F :Far<SPACE>
 nmap     <leader>R :Fardo<CR>
 nmap     <leader>U :Farundo<CR>
 
-nnoremap <silent> <leader>rr :cfdo %s//g<LEFT><LEFT>
-nnoremap <silent> <leader>ru :cfdo update
+nmap     <M-F>f <Plug>CtrlSFPrompt
+vmap     <M-F>f <Plug>CtrlSFVwordPath
+vmap     <M-F>F <Plug>CtrlSFVwordExec
+nmap     <M-F>n <Plug>CtrlSFCwordPath
+nmap     <M-F>p <Plug>CtrlSFPwordPath
+nnoremap <M-F>o :CtrlSFOpen<CR>
+nnoremap <M-F>t :CtrlSFToggle<CR>
+inoremap <M-F>t <Esc>:CtrlSFToggle<CR>
+
+inoremap jj <Esc>
 
 "" Open file browser
 " nnoremap <silent> <leader>k :Vexplore<CR>
@@ -360,7 +368,7 @@ nnoremap <leader>gr :Gread<CR>
 nnoremap <leader>gw :Gwrite<CR><CR>
 nnoremap <leader>go :Gbrowse<CR>
 nnoremap <leader>gm :Gmerge<CR>
-nnoremap <leader>gi :Gblame<CR>
+nnoremap <leader>gB :Gblame<CR>
 
 "" Abbreviations
 cnoreabbrev W! w!
