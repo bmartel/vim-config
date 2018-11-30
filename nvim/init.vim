@@ -50,12 +50,14 @@ call minpac#add('christoomey/vim-sort-motion')        " Allows for quick line so
 call minpac#add('tommcdo/vim-exchange')               " Text object swapping
 call minpac#add('w0rp/ale')                           " Async Linter
 call minpac#add('pangloss/vim-javascript')            " Javascript syntax highlighting
+" call minpac#add('elmcast/elm-vim')                    " Elm syntax highlighting
 call minpac#add('posva/vim-vue')                      " Vue file syntax highlighting
-call minpac#add('kchmck/vim-coffee-script')           " Coffeescript syntax highlighting
+" call minpac#add('kchmck/vim-coffee-script')           " Coffeescript syntax highlighting
 call minpac#add('lumiliet/vim-twig')                  " Twig template syntax highlighting
 call minpac#add('mattn/emmet-vim')                    " Emmet html completion
 call minpac#add('editorconfig/editorconfig-vim')      " Allow editorconfig to maintain syntax settings
-call minpac#add('bmartel/vim-one')                    " Customized take on atoms one dark
+" call minpac#add('bmartel/vim-one')                    " Customized take on atoms one dark
+call minpac#add('jeffkreeftmeijer/vim-dim')           " Terminal matching 16bit ansi colors
 call minpac#add('NovaDev94/lightline-onedark')        " Onedark lightline theme
 
 "------------------------------------------------------------------------------
@@ -99,7 +101,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " ALE CONFIG
 "------------------------------------------------------------------------------
 let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'vue': ['prettier', 'eslint']}
-let g:ale_fix_on_save = 1
+let g:ale_fix_on_save = 0
 let g:ale_linters_explicit = 1
 " let g:prettier#autoformat = 0
 " autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue PrettierAsync
@@ -109,6 +111,11 @@ let g:ale_linters_explicit = 1
 "------------------------------------------------------------------------------
 let g:javascript_enable_domhtmlcss = 1
 let g:jsx_ext_required = 0
+
+"------------------------------------------------------------------------------
+" ELM CONFIG
+"------------------------------------------------------------------------------
+let g:elm_setup_keybindings = 0
 
 "------------------------------------------------------------------------------
 " EASYMOTION CONFIG
@@ -160,12 +167,13 @@ command! -bang -nargs=* Rg
 "------------------------------------------------------------------------------
 let g:ctrlsf_search_mode = 'async'
 let g:ctrlsf_winsize = '100%'
+let g:ctrlsf_position = 'bottom'
 
 "------------------------------------------------------------------------------
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
 set background=dark
-colorscheme one
+colorscheme dim
 let g:lightline = {
       \ 'colorscheme': 'onedark',
       \ }
@@ -246,19 +254,19 @@ nmap <C-w>c :enew<bar>bd #<CR>
 "" Search in files
 nmap     <leader>l :Files<CR>
 nmap     <leader>L :Rg<SPACE>
-nmap     <leader>f :F<SPACE>
-nmap     <leader>F :Far<SPACE>
+nmap     <leader>fa :F<SPACE>
+nmap     <leader>Fa :Far<SPACE>
 nmap     <leader>R :Fardo<CR>
 nmap     <leader>U :Farundo<CR>
 
-nmap     <M-F>f <Plug>CtrlSFPrompt
-vmap     <M-F>f <Plug>CtrlSFVwordPath
-vmap     <M-F>F <Plug>CtrlSFVwordExec
-nmap     <M-F>n <Plug>CtrlSFCwordPath
-nmap     <M-F>p <Plug>CtrlSFPwordPath
-nnoremap <M-F>o :CtrlSFOpen<CR>
-nnoremap <M-F>t :CtrlSFToggle<CR>
-inoremap <M-F>t <Esc>:CtrlSFToggle<CR>
+nmap     <leader>ff <Plug>CtrlSFPrompt
+vmap     <leader>ff <Plug>CtrlSFVwordPath
+vmap     <leader>Ff <Plug>CtrlSFVwordExec
+nmap     <leader>fn <Plug>CtrlSFCwordPath
+nmap     <leader>fp <Plug>CtrlSFPwordPath
+nnoremap <leader>fo :CtrlSFOpen<CR>
+nnoremap <leader>ft :CtrlSFToggle<CR>
+inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
 
 inoremap jj <Esc>
 

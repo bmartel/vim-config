@@ -161,6 +161,7 @@ command! -bang -nargs=* Rg
 "------------------------------------------------------------------------------
 let g:ctrlsf_search_mode = 'async'
 let g:ctrlsf_winsize = '100%'
+let g:ctrlsf_position = 'bottom'
 
 "------------------------------------------------------------------------------
 " VISUAL CONFIG
