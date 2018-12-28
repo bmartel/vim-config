@@ -13,10 +13,9 @@
 
 "------------------------------------------------------------------------------
 " GENERAL
-"------------------------------------------------------------------------------
+" ------------------------------------------------------------------------------
 set encoding=utf-8                  " Ensure encoding is UTF-8
 set nocompatible                    " Disable Vi compatability
-" set shell=/usr/local/bin/fish       " Ensure fish is used for shell
 set binary
 set noeol                           " No automatic end of line additions
 set timeoutlen=1000 ttimeoutlen=0   " reduce timeout required for key to register
@@ -27,38 +26,45 @@ syntax sync minlines=256
 "------------------------------------------------------------------------------
 " PlUGIN CONFIG
 "------------------------------------------------------------------------------
-packadd minpac
+call plug#begin( '~/.vim/plugged')
 
-call minpac#init()
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " Sidebar file tree
+Plug 'itchyny/lightline.vim'              " Status bar
+Plug 'terryma/vim-multiple-cursors'       " Add Sublime text style multiple cursors
+Plug 'easymotion/vim-easymotion'          " Quick movement within files
+Plug 'brooth/far.vim'
+Plug 'junegunn/fzf', { 'do': '~/.fzf/install --all' }
+Plug 'junegunn/fzf.vim'                   " Quick fuzzy finder
+Plug 'dyng/ctrlsf.vim'                    " Sublime text style search window
+Plug 'SirVer/ultisnips'
+Plug 'dyng/ctrlsf.vim'                    " Sublime text style search window
+Plug 'bmartel/vim-snippets'               " Snippets!
+Plug 'tpope/vim-commentary'               " Quickly comment lines out and in
+Plug 'tpope/vim-fugitive'                 " Help formatting commit messages
+Plug 'tpope/vim-surround'                 " Quickly change surrounding braces/quotes etc
+Plug 'christoomey/vim-system-copy'        " Better control of buffer <-> clipboard
+Plug 'christoomey/vim-sort-motion'        " Allows for quick line sorting
+Plug 'tommcdo/vim-exchange'               " Text object swapping
+Plug 'w0rp/ale'                           " Async Linter
+Plug 'pangloss/vim-javascript'            " Javascript syntax highlighting
+Plug 'posva/vim-vue'                    " Vue file syntax highlighting
+Plug 'mattn/emmet-vim'                  " Emmet html completion
+Plug 'editorconfig/editorconfig-vim'      " Allow editorconfig to maintain syntax settings
+Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highlights
+" Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
+" Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
+" Plug 'mxw/vim-jsx'                        " React jsx syntax
+" Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
+" Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
+" Plug 'jceb/vim-orgmode'                 " Task manager
+" Plug 'python-mode/python-mode', { 'branch': 'develop', 'for': 'python' } " Python ide
+" Plug 'mustache/vim-mustache-handlebars' " Handlebars syntax
+Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
+Plug 'NovaDev94/lightline-onedark'        " Onedark lightline theme
 
-call minpac#add('k-takata/minpac', {'type': 'opt'})
-call minpac#add('scrooloose/nerdtree')                " Side bar navigation
-call minpac#add('itchyny/lightline.vim')              " Status bar
-call minpac#add('terryma/vim-multiple-cursors')       " Add Sublime text style multiple cursors
-call minpac#add('easymotion/vim-easymotion')          " Quick movemnet within files
-call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
-call minpac#add('junegunn/fzf.vim')                   " Quick fuzzy finder
-call minpac#add('dyng/ctrlsf.vim')                    " Sublime text style search window
-call minpac#add('brooth/far.vim')
-call minpac#add('SirVer/ultisnips')                   " Snippets!
-call minpac#add('bmartel/vim-snippets')
-call minpac#add('tpope/vim-commentary')               " Quickly comment lines out and in
-call minpac#add('tpope/vim-fugitive')                 " Help formatting commit messages
-call minpac#add('tpope/vim-surround')                 " Quickly change surrounding braces/quotes etc
-call minpac#add('christoomey/vim-system-copy')        " Better control of buffer <-> clipboard
-call minpac#add('christoomey/vim-sort-motion')        " Allows for quick line sorting
-call minpac#add('tommcdo/vim-exchange')               " Text object swapping
-call minpac#add('w0rp/ale')                           " Async Linter
-call minpac#add('pangloss/vim-javascript')            " Javascript syntax highlighting
-" call minpac#add('elmcast/elm-vim')                    " Elm syntax highlighting
-call minpac#add('posva/vim-vue')                      " Vue file syntax highlighting
-" call minpac#add('kchmck/vim-coffee-script')           " Coffeescript syntax highlighting
-call minpac#add('lumiliet/vim-twig')                  " Twig template syntax highlighting
-call minpac#add('mattn/emmet-vim')                    " Emmet html completion
-call minpac#add('editorconfig/editorconfig-vim')      " Allow editorconfig to maintain syntax settings
-" call minpac#add('bmartel/vim-one')                    " Customized take on atoms one dark
-call minpac#add('jeffkreeftmeijer/vim-dim')           " Terminal matching 16bit ansi colors
-call minpac#add('NovaDev94/lightline-onedark')        " Onedark lightline theme
+call plug#end()
 
 "------------------------------------------------------------------------------
 " FUNCTIONS
@@ -72,6 +78,12 @@ function! OnlyAndNerdtree()
 endfunction
 
 command! Only call OnlyAndNerdtree()
+
+
+"------------------------------------------------------------------------------
+" DEOPLETE
+"------------------------------------------------------------------------------
+let g:deoplete#enable_at_startup = 1
 
 "------------------------------------------------------------------------------
 " EMMET CONFIG
@@ -173,7 +185,7 @@ let g:ctrlsf_position = 'bottom'
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
 set background=dark
-colorscheme dim
+colorscheme one
 let g:lightline = {
       \ 'colorscheme': 'onedark',
       \ }
