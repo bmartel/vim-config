@@ -1,43 +1,43 @@
 #!/bin/sh
-set -e
-shopt -s dotglob nullglob
+echo "Attempting to setup vim/neovim configs"
 
-VIM_BIN=$(which vim)
-NEOVIM_BIN=$(which nvim)
+VIM_BIN=$(command -v vim)
+NEOVIM_BIN=$(command -v nvim)
+
 
 # Vim
-if [ -e $VIM_BIN ]; then
+if [ -e "$VIM_BIN" ]; then
   echo "Vim detected"
 
-  if [ -d $PWD/vim ]; then
+  if [ -d "$PWD/vim" ]; then
     echo "=== Local Vim folder exists"
   else
     echo "=== Creating local Vim folder"
-    mkdir $PWD/vim
+    mkdir "$PWD/vim"
   fi
 
-  if [ -e $HOME/.vimrc ] || [ -e $HOME/.vim ]; then
+  if [ -e "$HOME/.vimrc" ] || [ -e "$HOME/.vim" ]; then
     today=$(date +%F)
     echo "=== Vim files detected, backing old ones up if not symlinked"
 
-    if [ -L $HOME/.vimrc ]; then
+    if [ -L "$HOME/.vimrc" ]; then
       echo "... Ignoring symlinked Vim config"
     else
-      if [ -e $HOME/.vimrc ]; then
+      if [ -e "$HOME/.vimrc" ]; then
         echo "... Backing up $HOME/.vimrc to $HOME/vimrc_$today"
-        mv $HOME/.vimrc $HOME/vimrc_$today
+        mv "$HOME/.vimrc" "$HOME/vimrc_$today"
       fi
     fi
 
-    if [ -L $HOME/.vim ]; then
+    if [ -L "$HOME/.vim" ]; then
       echo "... Ignoring symlinked Vim directory"
     else
-      if [ -d $HOME/.vim ]; then
+      if [ -d "$HOME/.vim" ]; then
         echo "... Backing up $HOME/.vim to $HOME/vim_$today"
-        rm -rf $HOME/vim_$today
-        mkdir $HOME/vim_$today
-        cp -R $HOME/.vim $HOME/vim_$today/
-        rm -rf $HOME/.vim
+        rm -rf "$HOME/vim_$today"
+        mkdir "$HOME/vim_$today"
+        cp -R "$HOME/.vim" "$HOME/vim_$today/"
+        rm -rf "$HOME/.vim"
       fi
     fi
   else
@@ -45,19 +45,19 @@ if [ -e $VIM_BIN ]; then
   fi
 
   echo "=== Linking Vim files"
-  if [ -L $HOME/.vimrc ]; then
+  if [ -L "$HOME/.vimrc" ]; then
     echo "... Ignoring symlinked Vim config"
   else
-    ln -s $PWD/vimrc $HOME/.vimrc
+    ln -s "$PWD/vimrc" "$HOME/.vimrc"
   fi
 
-  if [ -L $HOME/.vim ]; then
+  if [ -L "$HOME/.vim" ]; then
     echo "... Ignoring symlinked Vim directory"
   else
-    ln -s $PWD/vim $HOME/.vim
+    ln -s "$PWD/vim" "$HOME/.vim"
   fi
 
-  if [ -e $HOME/.vim/autoload/plug.vim ]; then
+  if [ -e "$HOME/.vim/autoload/plug.vim" ]; then
     echo "... VimPlug already installed and autoloaded for Vim"
   else
     echo "=== Installing VimPlug for Vim"
@@ -66,33 +66,33 @@ if [ -e $VIM_BIN ]; then
   fi
 
   echo "=== Installing Vim plugins"
-  nvim +PlugInstall! +qall
+  vim +PlugInstall! +qall
 fi
 
 # NeoVim
-if [ -e $NEOVIM_BIN ]; then
+if [ -e "$NEOVIM_BIN" ]; then
   echo "NeoVim detected"
 
-  if [ -d $PWD/nvim ]; then
+  if [ -d "$PWD/nvim" ]; then
     echo "=== Local NeoVim folder exists"
   else
     echo "=== Creating local NeoVim folder"
-    mkdir $PWD/nvim
+    mkdir "$PWD/nvim"
   fi
 
-  if [ -e $HOME/.config/nvim ]; then
+  if [ -e "$HOME/.config/nvim" ]; then
     today=$(date +%F)
     echo "=== NeoVim files detected, backing old ones up if not symlinked"
 
-    if [ -L $HOME/.config/nvim ]; then
+    if [ -L "$HOME/.config/nvim" ]; then
       echo "... Ignoring symlinked NeoVim directory"
     else
-      if [ -d $HOME/.config/nvim ]; then
+      if [ -d "$HOME/.config/nvim" ]; then
         echo "... Backing up $HOME/.config/nvim to $HOME/neovim_$today"
-        rm -rf $HOME/neovim_$today
-        mkdir $HOME/neovim_$today
-        cp -R $HOME/.config/nvim $HOME/neovim_$today/
-        rm -rf $HOME/.config/nvim
+        rm -rf "$HOME/neovim_$today"
+        mkdir "$HOME/neovim_$today"
+        cp -R "$HOME/.config/nvim" "$HOME/neovim_$today/"
+        rm -rf "$HOME/.config/nvim"
       fi
     fi
   else
@@ -100,13 +100,13 @@ if [ -e $NEOVIM_BIN ]; then
   fi
 
   echo "=== Linking NeoVim files"
-  if [ -L $HOME/.config/nvim ]; then
+  if [ -L "$HOME/.config/nvim" ]; then
     echo "... Ignoring symlinked NeoVim directory"
   else
-    ln -s $PWD/nvim $HOME/.config/nvim
+    ln -s "$PWD/nvim" "$HOME/.config/nvim"
   fi
 
-  if [ -e $HOME/.config/nvim/autoload/plug.vim ]; then
+  if [ -e "$HOME/.config/nvim/autoload/plug.vim" ]; then
     echo "... VimPlug already installed and autoloaded for NeoVim"
   else
     echo "=== Installing VimPlug for NeoVim"
@@ -115,7 +115,7 @@ if [ -e $NEOVIM_BIN ]; then
   fi
 
   echo "=== Installing NeoVim plugins"
-  vim +PlugInstall! +qall
+  nvim +PlugInstall! +qall
 
   echo "=== Done"
 fi
