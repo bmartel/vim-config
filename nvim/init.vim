@@ -56,7 +56,7 @@ Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highli
 " Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
 " Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
 " Plug 'mxw/vim-jsx'                        " React jsx syntax
-" Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
+Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
 " Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
 " Plug 'jceb/vim-orgmode'                 " Task manager
 " Plug 'python-mode/python-mode', { 'branch': 'develop', 'for': 'python' } " Python ide
@@ -113,7 +113,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " ALE CONFIG
 "------------------------------------------------------------------------------
 let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'vue': ['prettier', 'eslint']}
-let g:ale_fix_on_save = 0
+let g:ale_fix_on_save = 1
 let g:ale_linters_explicit = 1
 " let g:prettier#autoformat = 0
 " autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue PrettierAsync

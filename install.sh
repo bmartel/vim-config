@@ -65,7 +65,7 @@ if [ -e $VIM_BIN ]; then
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   fi
 
-  echo "=== Installing NeoVim plugins"
+  echo "=== Installing Vim plugins"
   nvim +PlugInstall! +qall
 fi
 
@@ -114,7 +114,7 @@ if [ -e $NEOVIM_BIN ]; then
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   fi
 
-  echo "=== Installing Vim plugins"
+  echo "=== Installing NeoVim plugins"
   vim +PlugInstall! +qall
 
   echo "=== Done"
