@@ -56,7 +56,7 @@ Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highli
 " Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
 " Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
 " Plug 'mxw/vim-jsx'                        " React jsx syntax
-Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
+" Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
 " Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
 " Plug 'jceb/vim-orgmode'                 " Task manager
 " Plug 'python-mode/python-mode', { 'branch': 'develop', 'for': 'python' } " Python ide
@@ -75,6 +75,13 @@ function! OnlyAndNerdtree()
 
   windo if win_getid() != currentWindowID && &filetype != 'nerdtree' && &filetype != 'org' | close | endif
   call win_gotoid(currentWindowID)
+endfunction
+
+function! CleanEmptyBuffers()
+  let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
+  if !empty(buffers)
+      exe 'bw ' . join(buffers, ' ')
+  endif
 endfunction
 
 command! Only call OnlyAndNerdtree()
@@ -259,6 +266,7 @@ map <C-l> <C-w>l
 "" Close all other windows
 nmap <C-w>o :Only<CR>
 nmap <C-w>c :enew<bar>bd #<CR>
+" nmap <C-w
 
 "" Resize windows: Use defaults ctrl-w <|> -|+
 "" Split windows: Just use the defaults C-w s|v
@@ -315,8 +323,8 @@ nnoremap <leader>rv :vs#<CR>
 "" Reopen last closed buffer in vertical split
 nnoremap <leader>rh :sp#<CR>
 
-"" Show buffer list
-nnoremap <silent> <leader>b :buffers<CR>
+"" Show buffer list/switch
+nnoremap <silent> <leader>b :ls<CR>:e #
 
 "" Buffer nav
 noremap <leader>q :bp<CR>
@@ -331,6 +339,7 @@ noremap <leader>C :bd!<CR>
 "" Close all buffers
 noremap <leader>ac :%bd<CR>
 noremap <leader>oc :%bd<CR><C-O>:bd#<CR>
+noremap <leader>ae :call CleanEmptyBuffers()<CR>
 
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
