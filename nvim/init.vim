@@ -1,4 +1,3 @@
-
 "------------------------------------------------------------------------------
 "   .----. .-.   .-.  .--.  .----.  .---. .----..-.
 "   | {}  }|  `.'  | / {} \ | {}  }{_   _}| {_  | |
@@ -22,11 +21,13 @@ set timeoutlen=1000 ttimeoutlen=0   " reduce timeout required for key to registe
 set hidden
 set synmaxcol=128
 syntax sync minlines=256
+" set t_ZH=^[[3m
+" set t_ZR=^[[23m
 
 "------------------------------------------------------------------------------
 " PlUGIN CONFIG
 "------------------------------------------------------------------------------
-call plug#begin( '~/.vim/plugged')
+call plug#begin( '~/.config/nvim/plugged')
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
@@ -53,6 +54,11 @@ Plug 'posva/vim-vue'                    " Vue file syntax highlighting
 Plug 'mattn/emmet-vim'                  " Emmet html completion
 Plug 'editorconfig/editorconfig-vim'      " Allow editorconfig to maintain syntax settings
 Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highlights
+Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
+" Plug 'atelierbram/Base2Tone-vim'          " Duotone colorschemes
+" Plug 'chriskempson/base16-vim'
+" Plug 'arcticicestudio/nord-vim'
+Plug 'NovaDev94/lightline-onedark'        " Onedark lightline theme
 " Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
 " Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
 " Plug 'mxw/vim-jsx'                        " React jsx syntax
@@ -61,8 +67,6 @@ Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highli
 " Plug 'jceb/vim-orgmode'                 " Task manager
 " Plug 'python-mode/python-mode', { 'branch': 'develop', 'for': 'python' } " Python ide
 " Plug 'mustache/vim-mustache-handlebars' " Handlebars syntax
-Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
-Plug 'NovaDev94/lightline-onedark'        " Onedark lightline theme
 
 call plug#end()
 
@@ -193,6 +197,41 @@ let g:ctrlsf_position = 'bottom'
 "------------------------------------------------------------------------------
 set background=dark
 colorscheme one
+" Base2Tone Dark
+" colorscheme Base2Tone_EveningDark
+" colorscheme Base2Tone_MorningDark
+" colorscheme Base2Tone_SeaDark
+" colorscheme Base2Tone_SpaceDark
+" colorscheme Base2Tone_EarthDark
+" colorscheme Base2Tone_ForestDark
+" colorscheme Base2Tone_DesertDark
+" colorscheme Base2Tone_LakeDark
+" colorscheme Base2Tone_MeadowDark
+" colorscheme Base2Tone_DrawbridgeDark
+" colorscheme Base2Tone_PoolDark
+" colorscheme Base2Tone_HeathDark
+" colorscheme Base2Tone_CaveDark
+
+" Base2Tone Light
+" set background=light
+" colorscheme Base2Tone_EveningLight
+" colorscheme Base2Tone_MorningLight
+" colorscheme Base2Tone_SeaLight
+" colorscheme Base2Tone_SpaceLight
+" colorscheme Base2Tone_EarthLight
+" colorscheme Base2Tone_ForestLight
+" colorscheme Base2Tone_DesertLight
+" colorscheme Base2Tone_LakeLight
+" colorscheme Base2Tone_MeadowLight
+" colorscheme Base2Tone_DrawbridgeLight
+" colorscheme Base2Tone_PoolLight
+" colorscheme Base2Tone_HeathLight
+" colorscheme Base2Tone_CaveLight
+
+set noshowmode
+" let g:lightline = {
+"       \ 'colorscheme': 'Base2Tone_Earth',
+"       \ }
 let g:lightline = {
       \ 'colorscheme': 'onedark',
       \ }
@@ -201,12 +240,12 @@ set hlsearch
 let loaded_matchparen=1
 set list listchars=tab:\ \ ,trail:·
 
-if (has("termguicolors"))
-  set termguicolors
-endif
+" if (has("termguicolors"))
+"   set termguicolors
+" endif
 
 set mousemodel=popup
-let &t_Co=256
+set t_Co=256
 set nocursorline
 set guioptions=
 
@@ -245,6 +284,7 @@ set autoindent
 set smartindent
 set smarttab
 set lazyredraw
+set regexpengine=1
 set laststatus=2
 set expandtab
 set tabstop=2
@@ -266,12 +306,17 @@ map <C-l> <C-w>l
 "" Close all other windows
 nmap <C-w>o :Only<CR>
 nmap <C-w>c :enew<bar>bd #<CR>
-" nmap <C-w
 
 "" Resize windows: Use defaults ctrl-w <|> -|+
 "" Split windows: Just use the defaults C-w s|v
 
 "" Search in files
+
+set path-=/usr/include
+set wildcharm=<C-z>
+nnoremap <leader>eh :e **/*<C-z><S-Tab>
+nnoremap <leader>fh :find **/*<C-z><S-Tab>
+
 nmap     <leader>l :Files<CR>
 nmap     <leader>L :Rg<SPACE>
 nmap     <leader>fa :F<SPACE>
@@ -288,7 +333,7 @@ nnoremap <leader>fo :CtrlSFOpen<CR>
 nnoremap <leader>ft :CtrlSFToggle<CR>
 inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
 
-inoremap jj <Esc>
+" inoremap jj <Esc>
 
 "" Open file browser
 " nnoremap <silent> <leader>k :Vexplore<CR>
