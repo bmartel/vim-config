@@ -21,26 +21,28 @@ set timeoutlen=1000 ttimeoutlen=0   " reduce timeout required for key to registe
 set hidden
 set synmaxcol=128
 syntax sync minlines=256
-" set t_ZH=^[[3m
-" set t_ZR=^[[23m
+set t_ZH=^[[3m
+set t_ZR=^[[23m
 
 "------------------------------------------------------------------------------
 " PlUGIN CONFIG
 "------------------------------------------------------------------------------
 call plug#begin( '~/.config/nvim/plugged')
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'zchee/deoplete-jedi'
+
+Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " Sidebar file tree
 Plug 'itchyny/lightline.vim'              " Status bar
 Plug 'terryma/vim-multiple-cursors'       " Add Sublime text style multiple cursors
 Plug 'easymotion/vim-easymotion'          " Quick movement within files
-Plug 'brooth/far.vim'
-Plug 'junegunn/fzf', { 'do': '~/.fzf/install --all' }
-Plug 'junegunn/fzf.vim'                   " Quick fuzzy finder
-Plug 'dyng/ctrlsf.vim'                    " Sublime text style search window
+" Plug 'brooth/far.vim'
+" Plug 'junegunn/fzf', { 'do': '~/.fzf/install --all' }
+" Plug 'junegunn/fzf.vim'                   " Quick fuzzy finder
+" Plug 'dyng/ctrlsf.vim'                    " Sublime text style search window
 Plug 'SirVer/ultisnips'
-Plug 'dyng/ctrlsf.vim'                    " Sublime text style search window
 Plug 'bmartel/vim-snippets'               " Snippets!
 Plug 'tpope/vim-commentary'               " Quickly comment lines out and in
 Plug 'tpope/vim-fugitive'                 " Help formatting commit messages
@@ -48,7 +50,7 @@ Plug 'tpope/vim-surround'                 " Quickly change surrounding braces/qu
 Plug 'christoomey/vim-system-copy'        " Better control of buffer <-> clipboard
 Plug 'christoomey/vim-sort-motion'        " Allows for quick line sorting
 Plug 'tommcdo/vim-exchange'               " Text object swapping
-Plug 'w0rp/ale'                           " Async Linter
+" Plug 'w0rp/ale'                           " Async Linter
 Plug 'pangloss/vim-javascript'            " Javascript syntax highlighting
 Plug 'posva/vim-vue'                    " Vue file syntax highlighting
 Plug 'mattn/emmet-vim'                  " Emmet html completion
@@ -172,6 +174,92 @@ let g:NERDTreeMapOpenSplit = "s"
 let g:NERDTreeMapOpenVSplit = "v"
 
 "------------------------------------------------------------------------------
+" DENITE.NVIM CONFIG
+"------------------------------------------------------------------------------
+" Wrap in try/catch to avoid errors on initial install before plugin is available
+try
+" === Denite setup ==="
+" Use ripgrep for searching current directory for files
+" By default, ripgrep will respect rules in .gitignore
+"   --files: Print each file that would be searched (but don't search)
+"   --glob:  Include or exclues files for searching that match the given glob
+"            (aka ignore .git files)
+"
+call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
+
+" Use ripgrep in place of "grep"
+call denite#custom#var('grep', 'command', ['rg'])
+
+" Custom options for ripgrep
+"   --vimgrep:  Show results with every match on it's own line
+"   --hidden:   Search hidden directories and files
+"   --heading:  Show the file name above clusters of matches from each file
+"   --S:        Search case insensitively if the pattern is all lowercase
+call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
+
+" Recommended defaults for ripgrep via Denite docs
+call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+call denite#custom#var('grep', 'separator', ['--'])
+call denite#custom#var('grep', 'final_opts', [])
+
+" Remove date from buffer list
+call denite#custom#var('buffer', 'date_format', '')
+
+" Custom options for Denite
+"   auto_resize             - Auto resize the Denite window height automatically.
+"   prompt                  - Customize denite prompt
+"   direction               - Specify Denite window direction as directly below current pane
+"   winminheight            - Specify min height for Denite window
+"   highlight_mode_insert   - Specify h1-CursorLine in insert mode
+"   prompt_highlight        - Specify color of prompt
+"   highlight_matched_char  - Matched characters highlight
+"   highlight_matched_range - matched range highlight
+let s:denite_options = {'default' : {
+\ 'auto_resize': 1,
+\ 'prompt': 'λ:',
+\ 'direction': 'rightbelow',
+\ 'winminheight': '10',
+\ 'highlight_mode_insert': 'Visual',
+\ 'highlight_mode_normal': 'Visual',
+\ 'prompt_highlight': 'Function',
+\ 'highlight_matched_char': 'Function',
+\ 'highlight_matched_range': 'Normal'
+\ }}
+
+" Loop through denite options and enable them
+function! s:profile(opts) abort
+  for l:fname in keys(a:opts)
+    for l:dopt in keys(a:opts[l:fname])
+      call denite#custom#option(l:fname, l:dopt, a:opts[l:fname][l:dopt])
+    endfor
+  endfor
+endfunction
+
+call s:profile(s:denite_options)
+catch
+  echo 'Denite not installed. It should work after running :PlugInstall'
+endtry
+
+"------------------------------------------------------------------------------
+" COC.NVIM CONFIG
+"------------------------------------------------------------------------------
+
+" use <tab> for trigger completion and navigate to next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+"Close preview window when completion is done.
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+"------------------------------------------------------------------------------
 " FZF CONFIG
 "------------------------------------------------------------------------------
 set grepprg=rg\ --vimgrep
@@ -234,24 +322,30 @@ set noshowmode
 "       \ }
 let g:lightline = {
       \ 'colorscheme': 'onedark',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
       \ }
 set ruler
 set hlsearch
 let loaded_matchparen=1
 set list listchars=tab:\ \ ,trail:·
 
+set termguicolors " Enable true color support.
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
 " if (has("termguicolors"))
 "   set termguicolors
 " endif
 
 set mousemodel=popup
-set t_Co=256
 set nocursorline
 set guioptions=
-
-if &term =~ '256color'
-  set t_ut=
-endif
 
 "" Disable visualbell
 set noerrorbells visualbell t_vb=
@@ -291,6 +385,9 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 
+let g:markdown_folding = 1
+let g:markdown_enable_folding = 1
+
 "------------------------------------------------------------------------------
 " MAPPINGS
 "------------------------------------------------------------------------------
@@ -312,28 +409,43 @@ nmap <C-w>c :enew<bar>bd #<CR>
 
 "" Search in files
 
-set path-=/usr/include
-set wildcharm=<C-z>
-nnoremap <leader>eh :e **/*<C-z><S-Tab>
-nnoremap <leader>fh :find **/*<C-z><S-Tab>
+" set path-=/usr/include
+" set wildcharm=<C-z>
+" nnoremap <leader>eh :e **/*<C-z><S-Tab>
+" nnoremap <leader>fh :find **/*<C-z><S-Tab>
 
-nmap     <leader>l :Files<CR>
-nmap     <leader>L :Rg<SPACE>
-nmap     <leader>fa :F<SPACE>
-nmap     <leader>Fa :Far<SPACE>
-nmap     <leader>R :Fardo<CR>
-nmap     <leader>U :Farundo<CR>
+" nmap     <leader>l :Files<CR>
+" nmap     <leader>L :Rg<SPACE>
+" nmap     <leader>fa :F<SPACE>
+" nmap     <leader>Fa :Far<SPACE>
+" nmap     <leader>R :Fardo<CR>
+" nmap     <leader>U :Farundo<CR>
 
-nmap     <leader>ff <Plug>CtrlSFPrompt
-vmap     <leader>ff <Plug>CtrlSFVwordPath
-vmap     <leader>Ff <Plug>CtrlSFVwordExec
-nmap     <leader>fn <Plug>CtrlSFCwordPath
-nmap     <leader>fp <Plug>CtrlSFPwordPath
-nnoremap <leader>fo :CtrlSFOpen<CR>
-nnoremap <leader>ft :CtrlSFToggle<CR>
-inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
+" nmap     <leader>ff <Plug>CtrlSFPrompt
+" vmap     <leader>ff <Plug>CtrlSFVwordPath
+" vmap     <leader>Ff <Plug>CtrlSFVwordExec
+" nmap     <leader>fn <Plug>CtrlSFCwordPath
+" nmap     <leader>fp <Plug>CtrlSFPwordPath
+" nnoremap <leader>fo :CtrlSFOpen<CR>
+" nnoremap <leader>ft :CtrlSFToggle<CR>
+" inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
 
 " inoremap jj <Esc>
+
+nmap ; :Denite buffer -split=floating -winrow=1<CR>
+nmap <leader>l :Denite file/rec -split=floating -winrow=1<CR>
+nnoremap <leader>f :<C-u>Denite grep:. -no-empty -mode=normal<CR>
+nnoremap <leader>F :<C-u>DeniteCursorWord grep:. -mode=normal<CR>
+
+" === coc.nvim === "
+nmap <silent> <leader>dd <Plug>(coc-definition)
+nmap <silent> <leader>dt <Plug>(coc-type-definition)
+nmap <silent> <leader>dr <Plug>(coc-references)
+nmap <silent> <leader>dj <Plug>(coc-implementation)
+
+
+vmap <space>f  <Plug>(coc-format-selected)
+nmap <space>f  <Plug>(coc-format)
 
 "" Open file browser
 " nnoremap <silent> <leader>k :Vexplore<CR>
