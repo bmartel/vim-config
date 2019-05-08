@@ -112,15 +112,6 @@ let Grep_Skip_Dirs = '.git .nuxt env __pycache__ node_modules bower_components p
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 "------------------------------------------------------------------------------
-" ALE CONFIG
-"------------------------------------------------------------------------------
-let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'vue': ['prettier', 'eslint']}
-let g:ale_fix_on_save = 1
-let g:ale_linters_explicit = 1
-" let g:prettier#autoformat = 0
-" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue PrettierAsync
-
-"------------------------------------------------------------------------------
 " JAVASCRIPT CONFIG
 "------------------------------------------------------------------------------
 let g:javascript_enable_domhtmlcss = 1
@@ -249,66 +240,12 @@ inoremap <silent><expr> <TAB>
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 "------------------------------------------------------------------------------
-" FZF CONFIG
-"------------------------------------------------------------------------------
-set grepprg=rg\ --vimgrep
-let g:rg_command = 'rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" '
-
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \ g:rg_command
-  \ . <q-args>, 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-
-"------------------------------------------------------------------------------
-" CTRLSF CONFIG
-"------------------------------------------------------------------------------
-let g:ctrlsf_search_mode = 'async'
-let g:ctrlsf_winsize = '100%'
-let g:ctrlsf_position = 'bottom'
-
-"------------------------------------------------------------------------------
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
 set background=dark
 colorscheme one
-" Base2Tone Dark
-" colorscheme Base2Tone_EveningDark
-" colorscheme Base2Tone_MorningDark
-" colorscheme Base2Tone_SeaDark
-" colorscheme Base2Tone_SpaceDark
-" colorscheme Base2Tone_EarthDark
-" colorscheme Base2Tone_ForestDark
-" colorscheme Base2Tone_DesertDark
-" colorscheme Base2Tone_LakeDark
-" colorscheme Base2Tone_MeadowDark
-" colorscheme Base2Tone_DrawbridgeDark
-" colorscheme Base2Tone_PoolDark
-" colorscheme Base2Tone_HeathDark
-" colorscheme Base2Tone_CaveDark
-
-" Base2Tone Light
-" set background=light
-" colorscheme Base2Tone_EveningLight
-" colorscheme Base2Tone_MorningLight
-" colorscheme Base2Tone_SeaLight
-" colorscheme Base2Tone_SpaceLight
-" colorscheme Base2Tone_EarthLight
-" colorscheme Base2Tone_ForestLight
-" colorscheme Base2Tone_DesertLight
-" colorscheme Base2Tone_LakeLight
-" colorscheme Base2Tone_MeadowLight
-" colorscheme Base2Tone_DrawbridgeLight
-" colorscheme Base2Tone_PoolLight
-" colorscheme Base2Tone_HeathLight
-" colorscheme Base2Tone_CaveLight
 
 set noshowmode
-" let g:lightline = {
-"       \ 'colorscheme': 'Base2Tone_Earth',
-"       \ }
 let g:lightline = {
       \ 'colorscheme': 'onedark',
       \ 'active': {
@@ -327,10 +264,6 @@ set list listchars=tab:\ \ ,trail:·
 set termguicolors " Enable true color support.
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-
-" if (has("termguicolors"))
-"   set termguicolors
-" endif
 
 set mousemodel=popup
 set nocursorline
@@ -393,33 +326,7 @@ map <C-l> <C-w>l
 nmap <C-w>o :Only<CR>
 nmap <C-w>c :enew<bar>bd #<CR>
 
-"" Resize windows: Use defaults ctrl-w <|> -|+
-"" Split windows: Just use the defaults C-w s|v
-
-"" Search in files
-
-" set path-=/usr/include
-" set wildcharm=<C-z>
-" nnoremap <leader>eh :e **/*<C-z><S-Tab>
-" nnoremap <leader>fh :find **/*<C-z><S-Tab>
-
-" nmap     <leader>l :Files<CR>
-" nmap     <leader>L :Rg<SPACE>
-" nmap     <leader>fa :F<SPACE>
-" nmap     <leader>Fa :Far<SPACE>
-" nmap     <leader>R :Fardo<CR>
-" nmap     <leader>U :Farundo<CR>
-
-" nmap     <leader>ff <Plug>CtrlSFPrompt
-" vmap     <leader>ff <Plug>CtrlSFVwordPath
-" vmap     <leader>Ff <Plug>CtrlSFVwordExec
-" nmap     <leader>fn <Plug>CtrlSFCwordPath
-" nmap     <leader>fp <Plug>CtrlSFPwordPath
-" nnoremap <leader>fo :CtrlSFOpen<CR>
-" nnoremap <leader>ft :CtrlSFToggle<CR>
-" inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
-
-" inoremap jj <Esc>
+inoremap jk <Esc>
 
 nmap ; :Denite buffer -split=floating -winrow=1<CR>
 nmap <leader>l :Denite file/rec -split=floating -winrow=1<CR>
