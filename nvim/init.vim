@@ -29,19 +29,12 @@ set t_ZR=^[[23m
 "------------------------------------------------------------------------------
 call plug#begin( '~/.config/nvim/plugged')
 
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'zchee/deoplete-jedi'
-
 Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " Sidebar file tree
 Plug 'itchyny/lightline.vim'              " Status bar
 Plug 'terryma/vim-multiple-cursors'       " Add Sublime text style multiple cursors
 Plug 'easymotion/vim-easymotion'          " Quick movement within files
-" Plug 'brooth/far.vim'
-" Plug 'junegunn/fzf', { 'do': '~/.fzf/install --all' }
-" Plug 'junegunn/fzf.vim'                   " Quick fuzzy finder
-" Plug 'dyng/ctrlsf.vim'                    " Sublime text style search window
 Plug 'SirVer/ultisnips'
 Plug 'bmartel/vim-snippets'               " Snippets!
 Plug 'tpope/vim-commentary'               " Quickly comment lines out and in
@@ -50,22 +43,18 @@ Plug 'tpope/vim-surround'                 " Quickly change surrounding braces/qu
 Plug 'christoomey/vim-system-copy'        " Better control of buffer <-> clipboard
 Plug 'christoomey/vim-sort-motion'        " Allows for quick line sorting
 Plug 'tommcdo/vim-exchange'               " Text object swapping
-" Plug 'w0rp/ale'                           " Async Linter
 Plug 'pangloss/vim-javascript'            " Javascript syntax highlighting
 Plug 'posva/vim-vue'                    " Vue file syntax highlighting
 Plug 'mattn/emmet-vim'                  " Emmet html completion
 Plug 'editorconfig/editorconfig-vim'      " Allow editorconfig to maintain syntax settings
 Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highlights
 Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
-" Plug 'atelierbram/Base2Tone-vim'          " Duotone colorschemes
-" Plug 'chriskempson/base16-vim'
-" Plug 'arcticicestudio/nord-vim'
 Plug 'NovaDev94/lightline-onedark'        " Onedark lightline theme
 " Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
-" Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
+Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
 " Plug 'mxw/vim-jsx'                        " React jsx syntax
 " Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
-" Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
+Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
 " Plug 'jceb/vim-orgmode'                 " Task manager
 " Plug 'python-mode/python-mode', { 'branch': 'develop', 'for': 'python' } " Python ide
 " Plug 'mustache/vim-mustache-handlebars' " Handlebars syntax
