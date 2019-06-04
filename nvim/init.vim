@@ -48,8 +48,9 @@ Plug 'posva/vim-vue'                    " Vue file syntax highlighting
 Plug 'mattn/emmet-vim'                  " Emmet html completion
 Plug 'editorconfig/editorconfig-vim'      " Allow editorconfig to maintain syntax settings
 Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highlights
-Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
-Plug 'NovaDev94/lightline-onedark'        " Onedark lightline theme
+Plug 'Rigellute/shades-of-purple.vim'
+" Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
+" Plug 'NovaDev94/lightline-onedark'        " Onedark lightline theme
 " Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
 Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
 " Plug 'mxw/vim-jsx'                        " React jsx syntax
@@ -236,18 +237,34 @@ inoremap <silent><expr> <TAB>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 "Close preview window when completion is done.
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 "------------------------------------------------------------------------------
 " VISUAL CONFIG
 "------------------------------------------------------------------------------
+autocmd! ColorScheme * hi VertSplit cterm=none gui=none
 set background=dark
-colorscheme one
+" colorscheme one
+colorscheme shades_of_purple
 
 set noshowmode
+" let g:lightline = {
+"       \ 'colorscheme': 'onedark',
+"       \ 'active': {
+"       \   'left': [ [ 'mode', 'paste' ],
+"       \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+"       \ },
+"       \ 'component_function': {
+"       \   'cocstatus': 'coc#status'
+"       \ },
+"       \ }
+let g:shades_of_purple_lightline = 1
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'shades_of_purple',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
