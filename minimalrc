@@ -1,0 +1,146 @@
+set autoread                                     " reload on external file changes
+set backspace=indent,eol,start                   " backspace behaviour
+set clipboard=unnamed,unnamedplus                " enable clipboard
+set encoding=utf8                                " enable utf8 support
+set hidden                                       " hide buffers, don't close
+set mouse=a                                      " enable mouse support
+set nowrap                                       " disable wrapping
+set number                                       " show line numbers
+set term=xterm-256color                          " terminal type
+set textwidth=120                                " set width of all text
+set wildmenu wildmode=longest:full,full          " wildmode settings
+set splitbelow                                   " split panes on the bottom
+set splitright                                   " split panes to the right
+set formatoptions+=j " Delete comment character when joining commented lines
+
+filetype plugin indent on                        " enable filetype detection
+set listchars=eol:¶,trail:•,tab:▸\               " whitespace characters
+set scrolloff=999                                " center cursor position vertically
+set showbreak=¬\                                 " Wrapping character
+set showmatch                                    " show matching brackets
+syntax on                                        " enable syntax highlightning
+
+set regexpengine=1
+set laststatus=2
+set autoindent expandtab                         " autoindentation & tabbing
+set shiftwidth=2 softtabstop=2 tabstop=2         " 1 tab = 2 spaces
+
+set hlsearch ignorecase incsearch smartcase      " search options
+
+set nobackup noswapfile nowritebackup            " disable backup/swap files
+set undofile undodir=~/.vim/undo undolevels=9999 " undo options
+
+set lazyredraw                                   " enable lazyredraw
+set nocursorline                                 " disable cursorline
+set ttyfast                                      " enable fast terminal connection
+
+autocmd! VimEnter,ColorScheme * hi VertSplit cterm=none gui=none
+
+let mapleader=','                                " leader key
+
+nnoremap <leader># :g/\v^(#\|$)/d_<cr>|          " delete commented/blank lines
+nnoremap <leader>d :w !diff % -<cr>|             " show diff
+nnoremap <silent> <leader>i gg=G``<cr>|          " fix indentation
+nnoremap <leader>rt :retab<cr>|                   " convert tabs to spaces
+nnoremap <silent> <leader>t :%s/\s\+$//e<cr>|    " trim whitespace
+nnoremap <leader>lw :set wrap! wrap?<cr>|         " toggle wrapping
+
+"" Toggle light/dark background
+map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+
+"" Delete current file
+nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
+
+"" Clean search (highlight)
+nnoremap <silent> <leader><space> :noh<CR>
+
+"" Reopen last closed buffer in vertical split
+nnoremap <leader>rv :vs#<CR>
+
+"" Reopen last closed buffer in vertical split
+nnoremap <leader>rh :sp#<CR>
+
+"" Show buffer list/switch
+nnoremap <silent> <leader>b :ls<CR>:e #
+
+"" Buffer nav
+noremap <leader>q :bp<CR>
+noremap <leader>w :bn<CR>
+
+"" Close current buffer
+noremap <leader>c :bd<CR>
+
+"" Force Close current buffer
+noremap <leader>C :bd!<CR>
+
+"" Close all buffers
+noremap <leader>ac :%bd<CR>
+noremap <leader>oc :%bd<CR><C-O>:bd#<CR>
+noremap <leader>ae :call CleanEmptyBuffers()<CR>
+
+"" Vmap for maintain Visual Mode after shifting > and <
+vmap < <gv
+vmap > >gv
+
+"" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+"" Change windows
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+"" Close all other windows
+nmap <C-w>o :Only<CR>
+nmap <C-w>c :enew<bar>bd #<CR>
+
+inoremap jk <Esc>
+
+"" Move visual block
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
+
+"" Set working directory
+nnoremap <leader>. :lcd %:p:h<CR>
+
+"" Create new file with the current path filled in
+noremap <leader>mf :!touch <C-R>=expand("%:p:h") . "/" <CR>
+
+"" Create new directory with the current path filled in
+noremap <leader>md :!mkdir <C-R>=expand("%:p:h") . "/" <CR>
+
+"" Open an edit command with the path of the currently edited file path filled in
+noremap <leader>ef :e <C-R>=expand("%:p:h") . "/" <CR>
+
+"" Open a tab edit command with the path of the currently edited file path filled
+noremap <leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+
+" Terminal
+nnoremap <leader>T :terminal<CR>
+tnoremap <Esc> <C-\><C-n>
+tnoremap <C-w>h <C-\><C-n><C-w>h
+tnoremap <C-w>j <C-\><C-n><C-w>j
+tnoremap <C-w>k <C-\><C-n><C-w>k
+tnoremap <C-w>l <C-\><C-n><C-w>l
+
+"" Edit VIMRC
+nmap <silent> <leader>ev :edit $MYVIMRC<CR>
+
+"" Source VIMRC
+nmap <silent> <leader>ee :source $MYVIMRC<CR>
+
+"" Abbreviations
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Qall qall
