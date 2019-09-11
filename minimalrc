@@ -1,3 +1,29 @@
+" === Plugins
+function! PackInit() abort
+  packadd minpac
+
+  call minpac#init()
+  call minpac#add('k-takata/minpac', {'type': 'opt'})
+  call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
+  call minpac#add('neoclide/coc-json')
+  call minpac#add('neoclide/coc-html')
+  call minpac#add('neoclide/coc-emmet')
+  call minpac#add('neoclide/coc-css')
+  call minpac#add('neoclide/coc-tsserver')
+  call minpac#add('neoclide/coc-prettier')
+  call minpac#add('neoclide/coc-snippets')
+  call minpac#add('bmartel/vim-snippets')
+  call minpac#add('tpope/vim-commentary')
+  call minpac#add('tpope/vim-surround')
+  call minpac#add('leafgarland/typescript-vim')
+endfunction
+
+command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
+command! PackClean  call PackInit() | call minpac#clean()
+command! PackStatus call PackInit() | call minpac#status()
+" === /Plugins
+
+" === Base Config
 set autoread                                     " reload on external file changes
 set backspace=indent,eol,start                   " backspace behaviour
 set clipboard=unnamed,unnamedplus                " enable clipboard
@@ -14,9 +40,9 @@ set splitright                                   " split panes to the right
 set formatoptions+=j " Delete comment character when joining commented lines
 
 filetype plugin indent on                        " enable filetype detection
-set listchars=eol:¶,trail:•,tab:▸\               " whitespace characters
+set listchars=eol:?,trail:?,tab:?\               " whitespace characters
 set scrolloff=999                                " center cursor position vertically
-set showbreak=¬\                                 " Wrapping character
+set showbreak=?\                                 " Wrapping character
 set showmatch                                    " show matching brackets
 syntax on                                        " enable syntax highlightning
 
@@ -35,7 +61,10 @@ set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
 
 autocmd! VimEnter,ColorScheme * hi VertSplit cterm=none gui=none
+autocmd BufNewFile,BufRead *.tsx set filetype=typescript
+" === /Base Config
 
+" === Mappings
 let mapleader=','                                " leader key
 
 nnoremap <leader># :g/\v^(#\|$)/d_<cr>|          " delete commented/blank lines
@@ -74,6 +103,12 @@ noremap <leader>c :bd<CR>
 noremap <leader>C :bd!<CR>
 
 "" Close all buffers
+function! CleanEmptyBuffers()
+  let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
+  if !empty(buffers)
+      exe 'bw ' . join(buffers, ' ')
+  endif
+endfunction
 noremap <leader>ac :%bd<CR>
 noremap <leader>oc :%bd<CR><C-O>:bd#<CR>
 noremap <leader>ae :call CleanEmptyBuffers()<CR>
@@ -93,7 +128,6 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 "" Close all other windows
-nmap <C-w>o :Only<CR>
 nmap <C-w>c :enew<bar>bd #<CR>
 
 inoremap jk <Esc>
@@ -144,3 +178,27 @@ cnoreabbrev WQ wq
 cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
+" === /Mappings
+
+" === Plugin Mappings
+nmap <expr> <silent> <C-n> <SID>select_current_word()
+function! s:select_current_word()
+  if !get(g:, 'coc_cursors_activated', 0)
+    return "\<Plug>(coc-cursors-word)"
+  endif
+  return "*\<Plug>(coc-cursors-word):nohlsearch\<CR>"
+endfunc
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+" === /Plugin Mappings
