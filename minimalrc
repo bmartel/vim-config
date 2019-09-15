@@ -20,6 +20,7 @@ function! PackInit() abort
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('sheerun/vim-polyglot')
+  call minpac#add('liuchengxu/space-vim-theme')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -64,7 +65,13 @@ set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
 
-autocmd! VimEnter,ColorScheme * hi VertSplit cterm=none gui=none
+colorscheme space_vim_theme
+set background=dark
+set termguicolors
+hi LineNr     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
+hi VertSplit ctermbg=NONE guibg=NONE
+
 autocmd BufNewFile,BufRead *.tsx set filetype=typescript
 " === /Base Config
 
