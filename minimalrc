@@ -10,12 +10,16 @@ function! PackInit() abort
   call minpac#add('neoclide/coc-emmet')
   call minpac#add('neoclide/coc-css')
   call minpac#add('neoclide/coc-tsserver')
+  call minpac#add('neoclide/coc-eslint')
   call minpac#add('neoclide/coc-prettier')
   call minpac#add('neoclide/coc-snippets')
   call minpac#add('bmartel/vim-snippets')
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-surround')
-  call minpac#add('leafgarland/typescript-vim')
+  call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
+  call minpac#add('junegunn/fzf.vim')
+  call minpac#add('dyng/ctrlsf.vim')
+  call minpac#add('sheerun/vim-polyglot')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -71,8 +75,8 @@ nnoremap <leader># :g/\v^(#\|$)/d_<cr>|          " delete commented/blank lines
 nnoremap <leader>d :w !diff % -<cr>|             " show diff
 nnoremap <silent> <leader>i gg=G``<cr>|          " fix indentation
 nnoremap <leader>rt :retab<cr>|                   " convert tabs to spaces
-nnoremap <silent> <leader>t :%s/\s\+$//e<cr>|    " trim whitespace
-nnoremap <leader>lw :set wrap! wrap?<cr>|         " toggle wrapping
+nnoremap <silent> <leader>ts :%s/\s\+$//e<cr>|    " trim whitespace
+nnoremap <leader>tw :set wrap! wrap?<cr>|         " toggle wrapping
 
 "" Toggle light/dark background
 map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
@@ -181,6 +185,22 @@ cnoreabbrev Qall qall
 " === /Mappings
 
 " === Plugin Mappings
+let g:ctrlsf_search_mode = 'async'
+let g:ctrlsf_winsize = '50%'
+let g:ctrlsf_position = 'left'
+let g:ctrlsf_ackprg = 'rg'
+
+nmap     <leader>ff <Plug>CtrlSFPrompt
+vmap     <leader>ff <Plug>CtrlSFVwordPath
+vmap     <leader>fF <Plug>CtrlSFVwordExec
+nmap     <leader>fn <Plug>CtrlSFCwordPath
+nmap     <leader>fp <Plug>CtrlSFPwordPath
+nnoremap <leader>fo :CtrlSFOpen<CR>
+nnoremap <leader>ft :CtrlSFToggle<CR>
+inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
+
+nmap <leader>l :Files<CR>
+
 nmap <expr> <silent> <C-n> <SID>select_current_word()
 function! s:select_current_word()
   if !get(g:, 'coc_cursors_activated', 0)
