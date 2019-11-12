@@ -197,6 +197,7 @@ cnoreabbrev Qall qall
 " === /Mappings
 
 " === Plugin Mappings
+let $FZF_DEFAULT_COMMAND = 'rg --files'
 let g:ctrlsf_search_mode = 'async'
 let g:ctrlsf_winsize = '50%'
 let g:ctrlsf_position = 'left'
