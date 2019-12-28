@@ -5,14 +5,6 @@ function! PackInit() abort
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
   call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
-  call minpac#add('neoclide/coc-json')
-  call minpac#add('neoclide/coc-html')
-  call minpac#add('neoclide/coc-emmet')
-  call minpac#add('neoclide/coc-css')
-  call minpac#add('neoclide/coc-tsserver')
-  call minpac#add('neoclide/coc-eslint')
-  call minpac#add('neoclide/coc-prettier')
-  call minpac#add('neoclide/coc-snippets')
   call minpac#add('bmartel/vim-snippets')
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-surround')
@@ -78,6 +70,18 @@ hi SignColumn ctermbg=NONE guibg=NONE
 hi VertSplit ctermbg=NONE guibg=NONE
 
 autocmd BufNewFile,BufRead *.tsx set filetype=typescript
+
+let g:coc_global_extensions = [
+	\ 'coc-css',
+	\ 'coc-emmet',
+	\ 'coc-highlight',
+	\ 'coc-html',
+	\ 'coc-json',
+	\ 'coc-snippets',
+	\ 'coc-eslint',
+	\ 'coc-prettier',
+	\ 'coc-tsserver'
+\ ]
 " === /Base Config
 
 " === Mappings
