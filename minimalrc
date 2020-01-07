@@ -12,7 +12,7 @@ function! PackInit() abort
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('sheerun/vim-polyglot')
-  call minpac#add('liuchengxu/space-vim-theme')
+  call minpac#add('liuchengxu/space-vim-dark')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -29,7 +29,6 @@ set hidden                                       " hide buffers, don't close
 set mouse=a                                      " enable mouse support
 set nowrap                                       " disable wrapping
 set number relativenumber                        " show line numbers
-set term=xterm-256color                          " terminal type
 set textwidth=120                                " set width of all text
 set wildmenu wildmode=longest:full,full          " wildmode settings
 set splitbelow                                   " split panes on the bottom
@@ -57,9 +56,8 @@ set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
 
-colorscheme space_vim_theme
+colorscheme space-vim-dark
 set background=dark
-set termguicolors
 set guifont=IBM\ Plex\ Mono\ 13
 set guioptions-=m  "menu bar
 set guioptions-=T  "toolbar
@@ -82,6 +80,32 @@ let g:coc_global_extensions = [
 	\ 'coc-prettier',
 	\ 'coc-tsserver'
 \ ]
+
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
+
+function! RenameFile()
+  let old_name = expand('%')
+  let new_name = input('New file name: ', expand('%'), 'file')
+  if new_name != '' && new_name != old_name
+    exec ':saveas ' . new_name
+    exec ':silent !rm ' . old_name
+    redraw!
+  endif
+endfunction
+
+function! RemapNetrw()
+  nnoremap <buffer><leader>k :bd<CR>
+endfunction
+
+augroup Netrw 
+  autocmd!
+  autocmd VimEnter * :Vexplore
+  autocmd filetype netrw call RemapNetrw()
+augroup END
 " === /Base Config
 
 " === Mappings
@@ -96,6 +120,9 @@ nnoremap <leader>tw :set wrap! wrap?<cr>|         " toggle wrapping
 
 "" Toggle light/dark background
 map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+
+"" Rename current file
+nnoremap <leader>rr :call RenameFile()<cr>
 
 "" Delete current file
 nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
@@ -180,6 +207,8 @@ tnoremap <C-w>h <C-\><C-n><C-w>h
 tnoremap <C-w>j <C-\><C-n><C-w>j
 tnoremap <C-w>k <C-\><C-n><C-w>k
 tnoremap <C-w>l <C-\><C-n><C-w>l
+
+nnoremap <leader>k :Vexplore<CR>
 
 "" Edit VIMRC
 nmap <silent> <leader>ev :edit $MYVIMRC<CR>
