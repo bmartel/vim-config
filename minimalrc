@@ -12,6 +12,7 @@ function! PackInit() abort
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('sheerun/vim-polyglot')
+  call minpac#add('rakr/vim-one')
   call minpac#add('liuchengxu/space-vim-dark')
 endfunction
 
@@ -56,13 +57,17 @@ set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
 
-colorscheme space-vim-dark
+" colorscheme space-vim-dark
+colorscheme one
 set background=dark
+let g:one_allow_italics = 1
 set guifont=IBM\ Plex\ Mono\ 13
 set guioptions-=m  "menu bar
 set guioptions-=T  "toolbar
 set guioptions-=r  "scrollbar right
 set guioptions-=L  "scrollbar left
+hi Comment gui=italic cterm=italic
+hi htmlArg gui=italic cterm=italic
 hi LineNr     ctermbg=NONE guibg=NONE
 hi SignColumn ctermbg=NONE guibg=NONE
 hi VertSplit ctermbg=NONE guibg=NONE
@@ -82,10 +87,10 @@ let g:coc_global_extensions = [
 \ ]
 
 let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
+let g:netrw_liststyle = 1
+" let g:netrw_browse_split = 4
+let g:netrw_browse_split = 0
 let g:netrw_altv = 1
-let g:netrw_winsize = 25
 
 function! RenameFile()
   let old_name = expand('%')
@@ -103,7 +108,7 @@ endfunction
 
 augroup Netrw 
   autocmd!
-  autocmd VimEnter * :Vexplore
+  autocmd VimEnter * :Explore
   autocmd filetype netrw call RemapNetrw()
 augroup END
 " === /Base Config
@@ -180,8 +185,12 @@ nmap <C-w>c :enew<bar>bd #<CR>
 inoremap jk <Esc>
 
 "" Move visual block
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
 
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 
@@ -208,7 +217,7 @@ tnoremap <C-w>j <C-\><C-n><C-w>j
 tnoremap <C-w>k <C-\><C-n><C-w>k
 tnoremap <C-w>l <C-\><C-n><C-w>l
 
-nnoremap <leader>k :Vexplore<CR>
+nnoremap <leader>k :Explore<CR>
 
 "" Edit VIMRC
 nmap <silent> <leader>ev :edit $MYVIMRC<CR>
