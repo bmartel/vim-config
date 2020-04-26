@@ -108,7 +108,6 @@ endfunction
 
 augroup Netrw 
   autocmd!
-  autocmd VimEnter * :Explore
   autocmd filetype netrw call RemapNetrw()
 augroup END
 " === /Base Config
