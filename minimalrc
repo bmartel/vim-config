@@ -47,7 +47,7 @@ set laststatus=2
 set autoindent expandtab                         " autoindentation & tabbing
 set shiftwidth=2 softtabstop=2 tabstop=2         " 1 tab = 2 spaces
 
-set hlsearch ignorecase incsearch smartcase      " search options
+set hlsearch incsearch smartcase                 " search options
 
 set nobackup noswapfile nowritebackup            " disable backup/swap files
 set undofile undodir=~/.vim/undo undolevels=9999 " undo options
