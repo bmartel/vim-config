@@ -42,7 +42,7 @@ set showbreak=?\                                 " Wrapping character
 set showmatch                                    " show matching brackets
 syntax on                                        " enable syntax highlightning
 
-set regexpengine=1
+" set regexpengine=1
 set laststatus=2
 set autoindent expandtab                         " autoindentation & tabbing
 set shiftwidth=2 softtabstop=2 tabstop=2         " 1 tab = 2 spaces
@@ -84,6 +84,7 @@ let g:coc_global_extensions = [
 	\ 'coc-tsserver'
 \ ]
 
+let g:polyglot_disabled = ['ts', 'typescript']
 let g:netrw_banner = 0
 let g:netrw_liststyle = 1
 " let g:netrw_browse_split = 4
