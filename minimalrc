@@ -12,7 +12,6 @@ function! PackInit() abort
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('sheerun/vim-polyglot')
-  call minpac#add('rakr/vim-one')
   call minpac#add('liuchengxu/space-vim-dark')
 endfunction
 
@@ -57,10 +56,8 @@ set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
 
-" colorscheme space-vim-dark
-colorscheme one
+colorscheme space-vim-dark
 set background=dark
-let g:one_allow_italics = 1
 set guifont=IBM\ Plex\ Mono\ 13
 set guioptions-=m  "menu bar
 set guioptions-=T  "toolbar
@@ -74,6 +71,7 @@ hi VertSplit ctermbg=NONE guibg=NONE
 
 autocmd BufNewFile,BufRead *.tsx set filetype=typescript
 
+"" COC plugins
 let g:coc_global_extensions = [
 	\ 'coc-css',
 	\ 'coc-emmet',
@@ -181,15 +179,12 @@ map <C-l> <C-w>l
 "" Close all other windows
 nmap <C-w>c :enew<bar>bd #<CR>
 
+"" Escape
 inoremap jk <Esc>
 
 "" Move visual block
-nnoremap <A-j> :m .+1<CR>==
-nnoremap <A-k> :m .-2<CR>==
-inoremap <A-j> <Esc>:m .+1<CR>==gi
-inoremap <A-k> <Esc>:m .-2<CR>==gi
-vnoremap <A-j> :m '>+1<CR>gv=gv
-vnoremap <A-k> :m '<-2<CR>gv=gv
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 
@@ -216,6 +211,7 @@ tnoremap <C-w>j <C-\><C-n><C-w>j
 tnoremap <C-w>k <C-\><C-n><C-w>k
 tnoremap <C-w>l <C-\><C-n><C-w>l
 
+" NetRW file explorer
 nnoremap <leader>k :Explore<CR>
 
 "" Edit VIMRC
@@ -244,6 +240,7 @@ let g:ctrlsf_winsize = '50%'
 let g:ctrlsf_position = 'left'
 let g:ctrlsf_ackprg = 'rg'
 
+"" CtrlSF - sublime text-esque global search and replace
 nmap     <leader>ff <Plug>CtrlSFPrompt
 vmap     <leader>ff <Plug>CtrlSFVwordPath
 vmap     <leader>fF <Plug>CtrlSFVwordExec
@@ -253,9 +250,30 @@ nnoremap <leader>fo :CtrlSFOpen<CR>
 nnoremap <leader>ft :CtrlSFToggle<CR>
 inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
 
+"" Fuzzy match files
 nmap <leader>l :Files<CR>
+
+"" Fuzzy match text in files
 nmap <leader>fg :Rg<CR>
 
+"" Fuzzy match open buffers
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+nnoremap <silent> <leader>; :call fzf#run({
+\   'source':  reverse(<sid>buflist()),
+\   'sink':    function('<sid>bufopen'),
+\   'options': '+m',
+\   'down':    len(<sid>buflist()) + 2
+\ })<CR>
+
+"" Fix Tab selection with COC plugins
 nmap <expr> <silent> <C-n> <SID>select_current_word()
 function! s:select_current_word()
   if !get(g:, 'coc_cursors_activated', 0)
@@ -263,17 +281,14 @@ function! s:select_current_word()
   endif
   return "*\<Plug>(coc-cursors-word):nohlsearch\<CR>"
 endfunc
-
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
 let g:coc_snippet_next = '<tab>'
 " === /Plugin Mappings
