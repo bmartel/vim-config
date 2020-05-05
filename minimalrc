@@ -5,6 +5,7 @@ function! PackInit() abort
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
   call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
+  call minpac#add('vimwiki/vimwiki')
   call minpac#add('bmartel/vim-snippets')
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-surround')
@@ -84,12 +85,17 @@ let g:coc_global_extensions = [
 	\ 'coc-tsserver'
 \ ]
 
+"" NetRW file list styles
 let g:netrw_banner = 0
 let g:netrw_liststyle = 1
 " let g:netrw_browse_split = 4
 let g:netrw_browse_split = 0
 let g:netrw_altv = 1
 
+"" Vim Wiki
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+		      
 function! RenameFile()
   let old_name = expand('%')
   let new_name = input('New file name: ', expand('%'), 'file')
