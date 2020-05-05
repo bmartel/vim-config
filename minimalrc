@@ -126,6 +126,21 @@ nnoremap <leader>rt :retab<cr>|                   " convert tabs to spaces
 nnoremap <silent> <leader>ts :%s/\s\+$//e<cr>|    " trim whitespace
 nnoremap <leader>tw :set wrap! wrap?<cr>|         " toggle wrapping
 
+"" Vim Wiki
+nmap <leader>vw <Plug>VimwikiIndex
+nmap <leader>vq <Plug>VimwikiUISelect
+nmap <leader>vt <Plug>VimwikiTabIndex
+nmap <leader>vi <Plug>VimwikiDiaryIndex
+nmap <leader>vd <Plug>VimwikiMakeDiaryNote
+nmap <leader>vD <Plug>VimwikiTabMakeDiaryNote
+nmap <leader>vy <Plug>VimwikiMakeYesterdayDiaryNote
+nmap <leader>vm <Plug>VimwikiMakeTomorrowDiaryNote
+nmap <leader>vc <Plug>Vimwiki2HTML
+nmap <leader>vb <Plug>Vimwiki2HTMLBrowse
+nmap <leader>vg <Plug>VimwikiDiaryGenerateLinks
+nmap <leader>vl <Plug>VimwikiDeleteLink
+nmap <leader>vr <Plug>VimwikiRenameLink
+
 "" Toggle light/dark background
 map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 
