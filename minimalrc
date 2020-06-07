@@ -5,15 +5,19 @@ function! PackInit() abort
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
   call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
-  call minpac#add('vimwiki/vimwiki')
   call minpac#add('bmartel/vim-snippets')
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-surround')
   call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
   call minpac#add('junegunn/fzf.vim')
+  call minpac#add('fatih/vim-go', { 'do': ':GoUpdateBinaries' })
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('sheerun/vim-polyglot')
+  call minpac#add('justinmk/vim-sneak')
+  call minpac#add('rakr/vim-one')
+  call minpac#add('morhetz/gruvbox')
   call minpac#add('liuchengxu/space-vim-dark')
+  call minpac#add('vimwiki/vimwiki')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -57,7 +61,8 @@ set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
 
-colorscheme space-vim-dark
+" colorscheme space-vim-dark
+colorscheme gruvbox
 set background=dark
 set guifont=IBM\ Plex\ Mono\ 13
 set guioptions-=m  "menu bar
@@ -85,17 +90,13 @@ let g:coc_global_extensions = [
 	\ 'coc-tsserver'
 \ ]
 
-"" NetRW file list styles
 let g:netrw_banner = 0
 let g:netrw_liststyle = 1
 " let g:netrw_browse_split = 4
 let g:netrw_browse_split = 0
 let g:netrw_altv = 1
+let g:sneak#label = 1
 
-"" Vim Wiki
-let g:vimwiki_list = [{'path': '~/vimwiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
-		      
 function! RenameFile()
   let old_name = expand('%')
   let new_name = input('New file name: ', expand('%'), 'file')
@@ -117,7 +118,7 @@ augroup END
 " === /Base Config
 
 " === Mappings
-let mapleader=','                                " leader key
+let mapleader=' '                                " leader key
 
 nnoremap <leader># :g/\v^(#\|$)/d_<cr>|          " delete commented/blank lines
 nnoremap <leader>d :w !diff % -<cr>|             " show diff
@@ -125,21 +126,6 @@ nnoremap <silent> <leader>i gg=G``<cr>|          " fix indentation
 nnoremap <leader>rt :retab<cr>|                   " convert tabs to spaces
 nnoremap <silent> <leader>ts :%s/\s\+$//e<cr>|    " trim whitespace
 nnoremap <leader>tw :set wrap! wrap?<cr>|         " toggle wrapping
-
-"" Vim Wiki
-nmap <leader>vw <Plug>VimwikiIndex
-nmap <leader>vq <Plug>VimwikiUISelect
-nmap <leader>vt <Plug>VimwikiTabIndex
-nmap <leader>vi <Plug>VimwikiDiaryIndex
-nmap <leader>vd <Plug>VimwikiMakeDiaryNote
-nmap <leader>vD <Plug>VimwikiTabMakeDiaryNote
-nmap <leader>vy <Plug>VimwikiMakeYesterdayDiaryNote
-nmap <leader>vm <Plug>VimwikiMakeTomorrowDiaryNote
-nmap <leader>vc <Plug>Vimwiki2HTML
-nmap <leader>vb <Plug>Vimwiki2HTMLBrowse
-nmap <leader>vg <Plug>VimwikiDiaryGenerateLinks
-nmap <leader>vl <Plug>VimwikiDeleteLink
-nmap <leader>vr <Plug>VimwikiRenameLink
 
 "" Toggle light/dark background
 map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
@@ -151,7 +137,7 @@ nnoremap <leader>rr :call RenameFile()<cr>
 nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
 
 "" Clean search (highlight)
-nnoremap <silent> <leader><space> :noh<CR>
+nnoremap <silent> <leader>h :noh<CR>
 
 "" Reopen last closed buffer in vertical split
 nnoremap <leader>rv :vs#<CR>
@@ -164,7 +150,7 @@ nnoremap <silent> <leader>b :ls<CR>:e #
 
 "" Buffer nav
 noremap <leader>q :bp<CR>
-noremap <leader>w :bn<CR>
+noremap <leader>n :bn<CR>
 
 "" Close current buffer
 noremap <leader>c :bd<CR>
@@ -261,6 +247,9 @@ let g:ctrlsf_winsize = '50%'
 let g:ctrlsf_position = 'left'
 let g:ctrlsf_ackprg = 'rg'
 
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
 "" CtrlSF - sublime text-esque global search and replace
 nmap     <leader>ff <Plug>CtrlSFPrompt
 vmap     <leader>ff <Plug>CtrlSFVwordPath
@@ -272,7 +261,7 @@ nnoremap <leader>ft :CtrlSFToggle<CR>
 inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
 
 "" Fuzzy match files
-nmap <leader>l :Files<CR>
+nmap <leader><leader> :Files<CR>
 
 "" Fuzzy match text in files
 nmap <leader>fg :Rg<CR>
