@@ -5,19 +5,21 @@ function! PackInit() abort
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
   call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
+  call minpac#add('vimwiki/vimwiki')
+  call minpac#add('editorconfig/editorconfig-vim')
   call minpac#add('bmartel/vim-snippets')
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-surround')
   call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
   call minpac#add('junegunn/fzf.vim')
-  call minpac#add('fatih/vim-go', { 'do': ':GoUpdateBinaries' })
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('sheerun/vim-polyglot')
-  call minpac#add('justinmk/vim-sneak')
-  call minpac#add('rakr/vim-one')
   call minpac#add('morhetz/gruvbox')
+  call minpac#add('justinmk/vim-sneak')
   call minpac#add('liuchengxu/space-vim-dark')
-  call minpac#add('vimwiki/vimwiki')
+  call minpac#add('bmartel/shades-of-purple.vim')
+  call minpac#add('ghifarit53/tokyonight-vim')
+  call minpac#add('kevinhwang91/rnvimr', {'do': 'make sync'})
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -26,6 +28,7 @@ command! PackStatus call PackInit() | call minpac#status()
 " === /Plugins
 
 " === Base Config
+set iskeyword+=-                                 " treat dash separated words as a word text object"
 set autoread                                     " reload on external file changes
 set backspace=indent,eol,start                   " backspace behaviour
 set clipboard=unnamed,unnamedplus                " enable clipboard
@@ -38,7 +41,7 @@ set textwidth=120                                " set width of all text
 set wildmenu wildmode=longest:full,full          " wildmode settings
 set splitbelow                                   " split panes on the bottom
 set splitright                                   " split panes to the right
-set formatoptions+=j " Delete comment character when joining commented lines
+set formatoptions+=j                             " Delete comment character when joining commented lines
 
 filetype plugin indent on                        " enable filetype detection
 set listchars=eol:?,trail:?,tab:?\               " whitespace characters
@@ -47,7 +50,6 @@ set showbreak=?\                                 " Wrapping character
 set showmatch                                    " show matching brackets
 syntax on                                        " enable syntax highlightning
 
-" set regexpengine=1
 set laststatus=2
 set autoindent expandtab                         " autoindentation & tabbing
 set shiftwidth=2 softtabstop=2 tabstop=2         " 1 tab = 2 spaces
@@ -60,9 +62,14 @@ set undofile undodir=~/.vim/undo undolevels=9999 " undo options
 set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
+set updatetime=300                               " Faster completion
+set timeoutlen=200                               " By default timeoutlen is 1000 ms
 
-" colorscheme space-vim-dark
-colorscheme gruvbox
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set termguicolors
+
+colorscheme shades_of_purple
+
 set background=dark
 set guifont=IBM\ Plex\ Mono\ 13
 set guioptions-=m  "menu bar
@@ -76,27 +83,33 @@ hi SignColumn ctermbg=NONE guibg=NONE
 hi VertSplit ctermbg=NONE guibg=NONE
 
 autocmd BufNewFile,BufRead *.tsx set filetype=typescript
+autocmd TermOpen * setlocal nonumber norelativenumber
 
 "" COC plugins
 let g:coc_global_extensions = [
-	\ 'coc-css',
-	\ 'coc-emmet',
-	\ 'coc-highlight',
-	\ 'coc-html',
-	\ 'coc-json',
-	\ 'coc-snippets',
-	\ 'coc-eslint',
-	\ 'coc-prettier',
-	\ 'coc-tsserver'
+  \ 'coc-css',
+  \ 'coc-emmet',
+  \ 'coc-highlight',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-snippets',
+  \ 'coc-eslint',
+  \ 'coc-prettier',
+  \ 'coc-tsserver'
 \ ]
 
+"" NetRW file list styles
 let g:netrw_banner = 0
 let g:netrw_liststyle = 1
-" let g:netrw_browse_split = 4
 let g:netrw_browse_split = 0
 let g:netrw_altv = 1
+
+"" Vim Sneak
 let g:sneak#label = 1
 
+"" Vim Wiki
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
 function! RenameFile()
   let old_name = expand('%')
   let new_name = input('New file name: ', expand('%'), 'file')
@@ -118,7 +131,7 @@ augroup END
 " === /Base Config
 
 " === Mappings
-let mapleader=' '                                " leader key
+let mapleader=" "                               " leader key
 
 nnoremap <leader># :g/\v^(#\|$)/d_<cr>|          " delete commented/blank lines
 nnoremap <leader>d :w !diff % -<cr>|             " show diff
@@ -126,6 +139,21 @@ nnoremap <silent> <leader>i gg=G``<cr>|          " fix indentation
 nnoremap <leader>rt :retab<cr>|                   " convert tabs to spaces
 nnoremap <silent> <leader>ts :%s/\s\+$//e<cr>|    " trim whitespace
 nnoremap <leader>tw :set wrap! wrap?<cr>|         " toggle wrapping
+
+"" Vim Wiki
+nmap <leader>vw <Plug>VimwikiIndex
+nmap <leader>vq <Plug>VimwikiUISelect
+nmap <leader>vt <Plug>VimwikiTabIndex
+nmap <leader>vi <Plug>VimwikiDiaryIndex
+nmap <leader>vd <Plug>VimwikiMakeDiaryNote
+nmap <leader>vD <Plug>VimwikiTabMakeDiaryNote
+nmap <leader>vy <Plug>VimwikiMakeYesterdayDiaryNote
+nmap <leader>vm <Plug>VimwikiMakeTomorrowDiaryNote
+nmap <leader>vc <Plug>Vimwiki2HTML
+nmap <leader>vb <Plug>Vimwiki2HTMLBrowse
+nmap <leader>vg <Plug>VimwikiDiaryGenerateLinks
+nmap <leader>vl <Plug>VimwikiDeleteLink
+nmap <leader>vr <Plug>VimwikiRenameLink
 
 "" Toggle light/dark background
 map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
@@ -149,8 +177,8 @@ nnoremap <leader>rh :sp#<CR>
 nnoremap <silent> <leader>b :ls<CR>:e #
 
 "" Buffer nav
-noremap <leader>q :bp<CR>
-noremap <leader>n :bn<CR>
+noremap <A-q> :bp<CR>
+noremap <A-p> :bn<CR>
 
 "" Close current buffer
 noremap <leader>c :bd<CR>
@@ -169,9 +197,13 @@ noremap <leader>ac :%bd<CR>
 noremap <leader>oc :%bd<CR><C-O>:bd#<CR>
 noremap <leader>ae :call CleanEmptyBuffers()<CR>
 
-"" Vmap for maintain Visual Mode after shifting > and <
+"" maintain Visual Mode after shifting > and <
 vmap < <gv
 vmap > >gv
+
+"" move a  visual block up or down
+xnoremap K :move '<-2<CR>gv-gv
+xnoremap J :move '>+1<CR>gv-gv
 
 "" search will center on the line it's found in.
 nnoremap n nzzzv
@@ -186,9 +218,20 @@ map <C-l> <C-w>l
 "" Close all other windows
 nmap <C-w>c :enew<bar>bd #<CR>
 
-"" Escape
+" save
+nnoremap <silent> <C-s> :w<CR>
+" quit
+nnoremap <silent> <C-Q> :wq!<CR>
+" control-c instead of escape
+nnoremap <silent> <C-c> <Esc>
+"" escape
 inoremap jk <Esc>
+inoremap kj <Esc>
 
+" Better nav for omnicomplete
+inoremap <expr> <c-j> ("\<C-n>")
+inoremap <expr> <c-k> ("\<C-p>")
+"
 "" Move visual block
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
@@ -207,11 +250,16 @@ noremap <leader>md :!mkdir <C-R>=expand("%:p:h") . "/" <CR>
 "" Open an edit command with the path of the currently edited file path filled in
 noremap <leader>ef :e <C-R>=expand("%:p:h") . "/" <CR>
 
-"" Open a tab edit command with the path of the currently edited file path filled
-noremap <leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+"" Tabs
+nnoremap <A-n> :tabnew<CR>
+nnoremap <A-c> :tabc<CR>
+nnoremap <A-y> :tabe <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <A-j> :tabn<CR>
+nnoremap <A-k> :tabp<CR>
+nnoremap <A-o> :tabo<CR>
 
 " Terminal
-nnoremap <leader>T :terminal<CR>
+nnoremap <A-t> :terminal<CR>
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-w>h <C-\><C-n><C-w>h
 tnoremap <C-w>j <C-\><C-n><C-w>j
@@ -242,17 +290,16 @@ cnoreabbrev Qall qall
 
 " === Plugin Mappings
 let $FZF_DEFAULT_COMMAND = 'rg --files'
+let $FZF_DEFAULT_OPTS = '--reverse'
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 let g:ctrlsf_search_mode = 'async'
 let g:ctrlsf_winsize = '50%'
 let g:ctrlsf_position = 'left'
 let g:ctrlsf_ackprg = 'rg'
 
-let g:vimwiki_list = [{'path': '~/vimwiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
-
 "" CtrlSF - sublime text-esque global search and replace
-nmap     <leader>ff <Plug>CtrlSFPrompt
-vmap     <leader>ff <Plug>CtrlSFVwordPath
+nmap     <A-f> <Plug>CtrlSFPrompt
+vmap     <A-f> <Plug>CtrlSFVwordPath
 vmap     <leader>fF <Plug>CtrlSFVwordExec
 nmap     <leader>fn <Plug>CtrlSFCwordPath
 nmap     <leader>fp <Plug>CtrlSFPwordPath
@@ -261,10 +308,10 @@ nnoremap <leader>ft :CtrlSFToggle<CR>
 inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
 
 "" Fuzzy match files
-nmap <leader><leader> :Files<CR>
+nnoremap <A-s> :Files<CR>
 
 "" Fuzzy match text in files
-nmap <leader>fg :Rg<CR>
+nnoremap <A-g> :Rg<CR>
 
 "" Fuzzy match open buffers
 function! s:buflist()
@@ -276,7 +323,7 @@ endfunction
 function! s:bufopen(e)
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
-nnoremap <silent> <leader>; :call fzf#run({
+nnoremap <silent> <A-e> :call fzf#run({
 \   'source':  reverse(<sid>buflist()),
 \   'sink':    function('<sid>bufopen'),
 \   'options': '+m',
