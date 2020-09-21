@@ -14,12 +14,9 @@ function! PackInit() abort
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('sheerun/vim-polyglot')
-  call minpac#add('morhetz/gruvbox')
   call minpac#add('justinmk/vim-sneak')
-  call minpac#add('liuchengxu/space-vim-dark')
+  call minpac#add('morhetz/gruvbox')
   call minpac#add('bmartel/shades-of-purple.vim')
-  call minpac#add('ghifarit53/tokyonight-vim')
-  call minpac#add('kevinhwang91/rnvimr', {'do': 'make sync'})
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
