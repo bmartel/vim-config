@@ -4,6 +4,7 @@ function! PackInit() abort
 
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
+  call minpac#add('sheerun/vim-polyglot', {'type': 'opt'})
   call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
   call minpac#add('vimwiki/vimwiki')
   call minpac#add('editorconfig/editorconfig-vim')
@@ -13,15 +14,14 @@ function! PackInit() abort
   call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('dyng/ctrlsf.vim')
-  call minpac#add('sheerun/vim-polyglot')
   call minpac#add('justinmk/vim-sneak')
-  call minpac#add('morhetz/gruvbox')
-  call minpac#add('liuchengxu/space-vim-dark')
+  call minpac#add('bmartel/shades-of-purple.vim')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
 command! PackClean  call PackInit() | call minpac#clean()
 command! PackStatus call PackInit() | call minpac#status()
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " === /Plugins
 
 " === Base Config
@@ -60,7 +60,7 @@ set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
 set updatetime=300                               " Faster completion
-set timeoutlen=500                               " By default timeoutlen is 1000 ms
+set timeoutlen=300                               " By default timeoutlen is 1000 ms
 
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set termguicolors
@@ -320,13 +320,15 @@ nmap     <leader>fn <Plug>CtrlSFCwordPath
 nmap     <leader>fp <Plug>CtrlSFPwordPath
 nnoremap <leader>fo :CtrlSFOpen<CR>
 nnoremap <leader>ft :CtrlSFToggle<CR>
-inoremap <leader>ft <Esc>:CtrlSFToggle<CR>
 
 "" Fuzzy match files
 nnoremap <A-s> :Files<CR>
 
 "" Fuzzy match text in files
 nnoremap <A-g> :Rg<CR>
+
+"" Format file with prettier
+nnoremap <A-d> :Prettier<CR>
 
 "" Fuzzy match open buffers
 function! s:buflist()
