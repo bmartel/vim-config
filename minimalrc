@@ -59,8 +59,8 @@ set undofile undodir=~/.vim/undo undolevels=9999 " undo options
 set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
-set updatetime=300                               " Faster completion
-set timeoutlen=300                               " By default timeoutlen is 1000 ms
+set updatetime=500                               " Faster completion
+set timeoutlen=500                               " By default timeoutlen is 1000 ms
 
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set termguicolors
