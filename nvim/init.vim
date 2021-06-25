@@ -1,391 +1,204 @@
-"------------------------------------------------------------------------------
-"   .----. .-.   .-.  .--.  .----.  .---. .----..-.
-"   | {}  }|  `.'  | / {} \ | {}  }{_   _}| {_  | |
-"   | {}  }| |\ /| |/  /\  \| .-. \  | |  | {__ | `--.
-"   `----' `-' ` `-'`-'  `-'`-' `-'  `-'  `----'`----'
-" .-. .-..-..-.   .-. .---.  .----. .-. .-..----..-. .---.
-" | | | || ||  `.'  |/  ___}/  {}  \|  `| || {_  | |/   __}
-" \ \_/ /| || |\ /| |\     }\      /| |\  || |   | |\  {_ }
-"  `---' `-'`-' ` `-' `---'  `----' `-' `-'`-'   `-' `---'
-"------------------------------------------------------------------------------
+" === Plugins
+function! PackInit() abort
+  packadd minpac
 
-
-"------------------------------------------------------------------------------
-" GENERAL
-" ------------------------------------------------------------------------------
-set encoding=utf-8                  " Ensure encoding is UTF-8
-set nocompatible                    " Disable Vi compatability
-set binary
-set noeol                           " No automatic end of line additions
-set timeoutlen=1000 ttimeoutlen=0   " reduce timeout required for key to register
-set hidden
-set synmaxcol=128
-syntax sync minlines=256
-set t_ZH=^[[3m
-set t_ZR=^[[23m
-
-"------------------------------------------------------------------------------
-" PlUGIN CONFIG
-"------------------------------------------------------------------------------
-call plug#begin( '~/.config/nvim/plugged')
-
-Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " Sidebar file tree
-Plug 'itchyny/lightline.vim'              " Status bar
-Plug 'terryma/vim-multiple-cursors'       " Add Sublime text style multiple cursors
-Plug 'easymotion/vim-easymotion'          " Quick movement within files
-Plug 'SirVer/ultisnips'
-Plug 'bmartel/vim-snippets'               " Snippets!
-Plug 'tpope/vim-commentary'               " Quickly comment lines out and in
-Plug 'tpope/vim-fugitive'                 " Help formatting commit messages
-Plug 'tpope/vim-surround'                 " Quickly change surrounding braces/quotes etc
-Plug 'christoomey/vim-system-copy'        " Better control of buffer <-> clipboard
-Plug 'christoomey/vim-sort-motion'        " Allows for quick line sorting
-Plug 'tommcdo/vim-exchange'               " Text object swapping
-Plug 'pangloss/vim-javascript'            " Javascript syntax highlighting
-Plug 'posva/vim-vue'                    " Vue file syntax highlighting
-Plug 'mattn/emmet-vim'                  " Emmet html completion
-Plug 'editorconfig/editorconfig-vim'      " Allow editorconfig to maintain syntax settings
-Plug 'kshenoy/vim-signature'              " Vim marks easier bindings and highlights
-Plug 'Rigellute/shades-of-purple.vim'
-" Plug 'bmartel/vim-one'                    " Customized take on atoms one dark
-" Plug 'NovaDev94/lightline-onedark'        " Onedark lightline theme
-" Plug 'elmcast/elm-vim'                  " Elm syntax and helpers
-Plug 'leafgarland/typescript-vim'       " Typescript syntax highlighting
-" Plug 'mxw/vim-jsx'                        " React jsx syntax
-" Plug 'kchmck/vim-coffee-script'         " Coffeescript syntax highlighting
-Plug 'lumiliet/vim-twig'                " Twig template syntax highlighting
-" Plug 'jceb/vim-orgmode'                 " Task manager
-" Plug 'python-mode/python-mode', { 'branch': 'develop', 'for': 'python' } " Python ide
-" Plug 'mustache/vim-mustache-handlebars' " Handlebars syntax
-
-call plug#end()
-
-"------------------------------------------------------------------------------
-" FUNCTIONS
-"------------------------------------------------------------------------------
-"" Keep certain windows open when closing all others
-function! OnlyAndNerdtree()
-  let currentWindowID = win_getid()
-
-  windo if win_getid() != currentWindowID && &filetype != 'nerdtree' && &filetype != 'org' | close | endif
-  call win_gotoid(currentWindowID)
+  call minpac#init()
+  call minpac#add('k-takata/minpac', {'type': 'opt'})
+  call minpac#add('sheerun/vim-polyglot', {'type': 'opt'})
+  call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
+  call minpac#add('jparise/vim-graphql')
+  call minpac#add('jonsmithers/vim-html-template-literals')
+  call minpac#add('fatih/vim-go')
+  call minpac#add('vimwiki/vimwiki')
+  call minpac#add('editorconfig/editorconfig-vim')
+  call minpac#add('bmartel/vim-snippets')
+  call minpac#add('tpope/vim-commentary')
+  call minpac#add('tpope/vim-surround')
+  call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
+  call minpac#add('junegunn/fzf.vim')
+  call minpac#add('dyng/ctrlsf.vim')
+  call minpac#add('justinmk/vim-sneak')
+  call minpac#add('bmartel/shades-of-purple.vim')
+  call minpac#add('morhetz/gruvbox')
+  call minpac#add('romainl/vim-dichromatic')
 endfunction
 
-function! CleanEmptyBuffers()
-  let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
-  if !empty(buffers)
-      exe 'bw ' . join(buffers, ' ')
+command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
+command! PackClean  call PackInit() | call minpac#clean()
+command! PackStatus call PackInit() | call minpac#status()
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+" === /Plugins
+
+" === Base Config
+set iskeyword+=-                                 " treat dash separated words as a word text object"
+set autoread                                     " reload on external file changes
+set backspace=indent,eol,start                   " backspace behaviour
+set clipboard=unnamed,unnamedplus                " enable clipboard
+set encoding=utf8                                " enable utf8 support
+set hidden                                       " hide buffers, don't close
+set mouse=a                                      " enable mouse support
+set nowrap                                       " disable wrapping
+set number relativenumber                        " show line numbers
+set textwidth=120                                " set width of all text
+set wildmenu wildmode=longest:full,full          " wildmode settings
+set splitbelow                                   " split panes on the bottom
+set splitright                                   " split panes to the right
+set formatoptions+=j                             " Delete comment character when joining commented lines
+
+filetype plugin indent on                        " enable filetype detection
+set listchars=eol:?,trail:?,tab:?\               " whitespace characters
+set scrolloff=999                                " center cursor position vertically
+set showbreak=?\                                 " Wrapping character
+set showmatch                                    " show matching brackets
+syntax on                                        " enable syntax highlightning
+
+set laststatus=2
+set autoindent expandtab                         " autoindentation & tabbing
+set shiftwidth=2 softtabstop=2 tabstop=2         " 1 tab = 2 spaces
+
+set hlsearch incsearch smartcase                 " search options
+
+set nobackup noswapfile nowritebackup            " disable backup/swap files
+set undofile undodir=~/.vim/undo undolevels=9999 " undo options
+
+set lazyredraw                                   " enable lazyredraw
+set nocursorline                                 " disable cursorline
+set ttyfast                                      " enable fast terminal connection
+set updatetime=300                               " Faster completion
+set timeoutlen=300                               " By default timeoutlen is 1000 ms
+
+set termguicolors
+set background=dark
+colorscheme shades_of_purple
+
+set guifont=IBM\ Plex\ Mono\ 13
+set guioptions-=m  "menu bar
+set guioptions-=T  "toolbar
+set guioptions-=r  "scrollbar right
+set guioptions-=L  "scrollbar left
+hi Comment gui=italic cterm=italic
+hi htmlArg gui=italic cterm=italic
+hi LineNr     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
+hi VertSplit ctermbg=NONE guibg=NONE
+
+autocmd BufNewFile,BufRead *.prisma setfiletype graphql
+autocmd BufNewFile,BufRead *.tsx set filetype=typescript.jsx
+autocmd BufNewFile,BufRead *.rs call RemapFormatRust()
+autocmd TermOpen * setlocal nonumber norelativenumber
+
+"" COC plugins
+let g:coc_global_extensions = [
+  \ 'coc-css',
+  \ 'coc-emmet',
+  \ 'coc-highlight',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-snippets',
+  \ 'coc-graphql',
+  \ 'coc-prisma',
+  \ 'coc-eslint',
+  \ 'coc-prettier',
+  \ 'coc-tsserver'
+\ ]
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+"" NetRW file list styles
+let g:netrw_banner = 0
+let g:netrw_liststyle = 1
+let g:netrw_browse_split = 0
+let g:netrw_altv = 1
+
+"" Vim Sneak
+let g:sneak#label = 1
+
+"" Vim Wiki
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'nested_syntaxes': {'tsx': 'typescript.jsx', 'ts': 'typescript'}}]
+"" \ 'syntax': 'markdown', 'ext': '.md'
+function! RenameFile()
+  let old_name = expand('%')
+  let new_name = input('New file name: ', expand('%'), 'file')
+  if new_name != '' && new_name != old_name
+    exec ':saveas ' . new_name
+    exec ':silent !rm ' . old_name
+    redraw!
   endif
 endfunction
 
-command! Only call OnlyAndNerdtree()
-
-
-"------------------------------------------------------------------------------
-" DEOPLETE
-"------------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
-
-"------------------------------------------------------------------------------
-" EMMET CONFIG
-"------------------------------------------------------------------------------
-let g:user_emmet_expandabbr_key='<Tab>'
-
-"------------------------------------------------------------------------------
-" SNIPPETS CONFIG
-"------------------------------------------------------------------------------
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<C-j>"
-let g:UltiSnipsJumpBackwardTrigger="<C-k>"
-
-"------------------------------------------------------------------------------
-" GREP CONFIG
-"------------------------------------------------------------------------------
-let Grep_Default_Options = '-IR'
-let Grep_Skip_Files = '*.log *.db *.exe *.so *.dll *.pyc *.swp *.zip *.DS_STORE'
-let Grep_Skip_Dirs = '.git .nuxt env __pycache__ node_modules bower_components public_html dist vendor bundle .tmp storage project_files site-packages'
-
-"------------------------------------------------------------------------------
-" EDITORCONFIG
-"------------------------------------------------------------------------------
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
-"------------------------------------------------------------------------------
-" JAVASCRIPT CONFIG
-"------------------------------------------------------------------------------
-let g:javascript_enable_domhtmlcss = 1
-let g:jsx_ext_required = 0
-
-"------------------------------------------------------------------------------
-" ELM CONFIG
-"------------------------------------------------------------------------------
-let g:elm_setup_keybindings = 0
-
-"------------------------------------------------------------------------------
-" EASYMOTION CONFIG
-"------------------------------------------------------------------------------
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-
-" Jump to anywhere you want with minimal keystrokes, with just one key binding.
-" `s{char}{label}`
-" nmap s <Plug>(easymotion-overwin-f)
-" or
-" `s{char}{char}{label}`
-" Need one more keystroke, but on average, it may be more comfortable.
-nmap s <Plug>(easymotion-overwin-f2)
-
-" Turn on case insensitive feature
-let g:EasyMotion_smartcase = 1
-
-" JK motions: Line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-"
-"------------------------------------------------------------------------------
-" NERDTREE CONFIG
-"------------------------------------------------------------------------------
-let NERDTreeQuitOnOpen = 0
-let NERDTreeAutoDeleteBuffer = 1
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-let NERDTreeIgnore=['tmp$','\.tmp$','\.nuxt','env$','\.so$','\.swp$','\.zip$','\.pyc$','\.o$','\.obj$','\.git','\.rbc$','__pycache__','site-packages','node_modules','dist']
-let g:NERDTreeMapOpenSplit = "s"
-let g:NERDTreeMapOpenVSplit = "v"
-
-"------------------------------------------------------------------------------
-" DENITE.NVIM CONFIG
-"------------------------------------------------------------------------------
-" Wrap in try/catch to avoid errors on initial install before plugin is available
-try
-" === Denite setup ==="
-" Use ripgrep for searching current directory for files
-" By default, ripgrep will respect rules in .gitignore
-"   --files: Print each file that would be searched (but don't search)
-"   --glob:  Include or exclues files for searching that match the given glob
-"            (aka ignore .git files)
-"
-call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
-
-" Use ripgrep in place of "grep"
-call denite#custom#var('grep', 'command', ['rg'])
-
-" Custom options for ripgrep
-"   --vimgrep:  Show results with every match on it's own line
-"   --hidden:   Search hidden directories and files
-"   --heading:  Show the file name above clusters of matches from each file
-"   --S:        Search case insensitively if the pattern is all lowercase
-call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
-
-" Recommended defaults for ripgrep via Denite docs
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-
-" Remove date from buffer list
-call denite#custom#var('buffer', 'date_format', '')
-
-" Custom options for Denite
-"   auto_resize             - Auto resize the Denite window height automatically.
-"   prompt                  - Customize denite prompt
-"   direction               - Specify Denite window direction as directly below current pane
-"   winminheight            - Specify min height for Denite window
-"   highlight_mode_insert   - Specify h1-CursorLine in insert mode
-"   prompt_highlight        - Specify color of prompt
-"   highlight_matched_char  - Matched characters highlight
-"   highlight_matched_range - matched range highlight
-let s:denite_options = {'default' : {
-\ 'auto_resize': 1,
-\ 'prompt': 'λ:',
-\ 'direction': 'rightbelow',
-\ 'winminheight': '10',
-\ 'highlight_mode_insert': 'Visual',
-\ 'highlight_mode_normal': 'Visual',
-\ 'prompt_highlight': 'Function',
-\ 'highlight_matched_char': 'Function',
-\ 'highlight_matched_range': 'Normal'
-\ }}
-
-" Loop through denite options and enable them
-function! s:profile(opts) abort
-  for l:fname in keys(a:opts)
-    for l:dopt in keys(a:opts[l:fname])
-      call denite#custom#option(l:fname, l:dopt, a:opts[l:fname][l:dopt])
-    endfor
-  endfor
+function! RemapNetrw()
+  nnoremap <buffer><leader>k :bd<CR>
 endfunction
 
-call s:profile(s:denite_options)
-catch
-  echo 'Denite not installed. It should work after running :PlugInstall'
-endtry
-
-"------------------------------------------------------------------------------
-" COC.NVIM CONFIG
-"------------------------------------------------------------------------------
-
-" use <tab> for trigger completion and navigate to next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+function! CRustFmt()
+    exec ":silent !cargo fmt -- " . bufname("%")
 endfunction
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+function! RemapFormatRust()
+  nnoremap <A-d> :call CRustFmt()<CR>
+endfunction
 
+augroup Netrw 
+  autocmd!
+  autocmd filetype netrw call RemapNetrw()
+augroup END
 
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" === /Base Config
 
-"Close preview window when completion is done.
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+" === Mappings
+let mapleader=" "                               " leader key
 
-"------------------------------------------------------------------------------
-" VISUAL CONFIG
-"------------------------------------------------------------------------------
-autocmd! ColorScheme * hi VertSplit cterm=none gui=none
-set background=dark
-" colorscheme one
-colorscheme shades_of_purple
+nnoremap <leader># :g/\v^(#\|$)/d_<cr>|          " delete commented/blank lines
+nnoremap <leader>d :w !diff % -<cr>|             " show diff
+nnoremap <silent> <leader>i gg=G``<cr>|          " fix indentation
+nnoremap <leader>rt :retab<cr>|                   " convert tabs to spaces
+nnoremap <silent> <leader>ts :%s/\s\+$//e<cr>|    " trim whitespace
+nnoremap <leader>tw :set wrap! wrap?<cr>|         " toggle wrapping
 
-set noshowmode
-" let g:lightline = {
-"       \ 'colorscheme': 'onedark',
-"       \ 'active': {
-"       \   'left': [ [ 'mode', 'paste' ],
-"       \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
-"       \ },
-"       \ 'component_function': {
-"       \   'cocstatus': 'coc#status'
-"       \ },
-"       \ }
-let g:shades_of_purple_lightline = 1
-let g:lightline = {
-      \ 'colorscheme': 'shades_of_purple',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'cocstatus': 'coc#status'
-      \ },
-      \ }
-set ruler
-set hlsearch
-let loaded_matchparen=1
-set list listchars=tab:\ \ ,trail:·
-
-set termguicolors " Enable true color support.
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-
-set mousemodel=popup
-set nocursorline
-set guioptions=
-
-"" Disable visualbell
-set noerrorbells visualbell t_vb=
-if has('autocmd')
-  autocmd GUIEnter * set visualbell t_vb=
-endif
-
-"" Disable the blinking cursor.
-set gcr=a:blinkon0
-set scrolloff=3
-
-"------------------------------------------------------------------------------
-" BEHAVIOUR
-"------------------------------------------------------------------------------
-autocmd BufWritePre * :%s/\s\+$//e " strip trailing whitespace on save
-autocmd BufLeave * silent! wall    " save on lost focus
-
-set backspace=indent,eol,start     " configure backspace behavior
-set textwidth=120                  " set width of all text
-set noswapfile                     " disable swap files
-set nowb                           " disable writing backup
-
-set smartcase                      " ignore case if lower, otherwise match case
-
-set splitbelow                     " split panes on the bottom
-set splitright                     " split panes to the right
-
-"" indentation, spaces only, convert tabs
-set autoindent
-set smartindent
-set smarttab
-set lazyredraw
-set regexpengine=1
-set laststatus=2
-set expandtab
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-
-let g:markdown_folding = 1
-let g:markdown_enable_folding = 1
-
-"------------------------------------------------------------------------------
-" MAPPINGS
-"------------------------------------------------------------------------------
-let mapleader      = ','
-let maplocalleader = ','
-
-"" Change windows
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-
-"" Close all other windows
-nmap <C-w>o :Only<CR>
-nmap <C-w>c :enew<bar>bd #<CR>
-
-inoremap jk <Esc>
-
-nmap ; :Denite buffer -split=floating -winrow=1<CR>
-nmap <leader>l :Denite file/rec -split=floating -winrow=1<CR>
-nnoremap <leader>f :<C-u>Denite grep:. -no-empty -mode=normal<CR>
-nnoremap <leader>F :<C-u>DeniteCursorWord grep:. -mode=normal<CR>
-
-" === coc.nvim === "
-nmap <silent> <leader>dd <Plug>(coc-definition)
-nmap <silent> <leader>dt <Plug>(coc-type-definition)
-nmap <silent> <leader>dr <Plug>(coc-references)
-nmap <silent> <leader>dj <Plug>(coc-implementation)
-
-
-vmap <space>f  <Plug>(coc-format-selected)
-nmap <space>f  <Plug>(coc-format)
-
-"" Open file browser
-" nnoremap <silent> <leader>k :Vexplore<CR>
-nnoremap <C-w>t :NERDTreeToggle<Enter>
-nnoremap <C-w>T :NERDTreeFind<CR>
-
-"" search will center on the line it's found in.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-"" Clean search (highlight)
-nnoremap <silent> <leader><space> :noh<CR>
-
-"" Fix Emmet
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-
-"" Edit VIMRC
-nmap <silent> <leader>ev :edit $MYVIMRC<CR>
-
-"" Source VIMRC
-nmap <silent> <leader>ee :source $MYVIMRC<CR>
+"" Vim Wiki
+nmap <leader>vw <Plug>VimwikiIndex
+nmap <leader>vq <Plug>VimwikiUISelect
+nmap <leader>vt <Plug>VimwikiTabIndex
+nmap <leader>vi <Plug>VimwikiDiaryIndex
+nmap <leader>vd <Plug>VimwikiMakeDiaryNote
+nmap <leader>vD <Plug>VimwikiTabMakeDiaryNote
+nmap <leader>vy <Plug>VimwikiMakeYesterdayDiaryNote
+nmap <leader>vm <Plug>VimwikiMakeTomorrowDiaryNote
+nmap <leader>vc <Plug>Vimwiki2HTML
+nmap <leader>vb <Plug>Vimwiki2HTMLBrowse
+nmap <leader>vg <Plug>VimwikiDiaryGenerateLinks
+nmap <leader>vl <Plug>VimwikiDeleteLink
+nmap <leader>vr <Plug>VimwikiRenameLink
 
 "" Toggle light/dark background
 map <leader>x :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+map <leader>X :exec 'colorscheme' (g:colors_name ==# 'shades_of_purple') ? 'dichromatic' : 'shades_of_purple'<CR>
+
+"" Rename current file
+nnoremap <leader>rr :call RenameFile()<cr>
 
 "" Delete current file
 nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
+
+"" Clean search (highlight)
+nnoremap <silent> <leader>h :noh<CR>
 
 "" Reopen last closed buffer in vertical split
 nnoremap <leader>rv :vs#<CR>
@@ -397,8 +210,8 @@ nnoremap <leader>rh :sp#<CR>
 nnoremap <silent> <leader>b :ls<CR>:e #
 
 "" Buffer nav
-noremap <leader>q :bp<CR>
-noremap <leader>w :bn<CR>
+noremap <A-q> :bp<CR>
+noremap <A-p> :bn<CR>
 
 "" Close current buffer
 noremap <leader>c :bd<CR>
@@ -407,14 +220,51 @@ noremap <leader>c :bd<CR>
 noremap <leader>C :bd!<CR>
 
 "" Close all buffers
+function! CleanEmptyBuffers()
+  let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
+  if !empty(buffers)
+      exe 'bw ' . join(buffers, ' ')
+  endif
+endfunction
 noremap <leader>ac :%bd<CR>
 noremap <leader>oc :%bd<CR><C-O>:bd#<CR>
 noremap <leader>ae :call CleanEmptyBuffers()<CR>
 
-"" Vmap for maintain Visual Mode after shifting > and <
+"" maintain Visual Mode after shifting > and <
 vmap < <gv
 vmap > >gv
 
+"" move a  visual block up or down
+xnoremap K :move '<-2<CR>gv-gv
+xnoremap J :move '>+1<CR>gv-gv
+
+"" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+"" Change windows
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+"" Close all other windows
+nmap <C-w>c :enew<bar>bd #<CR>
+
+" save
+nnoremap <silent> <C-s> :w<CR>
+" quit
+nnoremap <silent> <C-Q> :wq!<CR>
+" control-c instead of escape
+nnoremap <silent> <C-c> <Esc>
+"" escape
+inoremap jk <Esc>
+inoremap kj <Esc>
+
+" Better nav for omnicomplete
+inoremap <expr> <c-j> ("\<C-n>")
+inoremap <expr> <c-k> ("\<C-p>")
+"
 "" Move visual block
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
@@ -433,35 +283,30 @@ noremap <leader>md :!mkdir <C-R>=expand("%:p:h") . "/" <CR>
 "" Open an edit command with the path of the currently edited file path filled in
 noremap <leader>ef :e <C-R>=expand("%:p:h") . "/" <CR>
 
-"" Open a tab edit command with the path of the currently edited file path filled
-noremap <leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+"" Tabs
+nnoremap <A-n> :tabnew<CR>
+nnoremap <A-c> :tabc<CR>
+nnoremap <A-y> :tabe <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <A-j> :tabn<CR>
+nnoremap <A-k> :tabp<CR>
+nnoremap <A-o> :tabo<CR>
 
 " Terminal
-nnoremap <leader>T :terminal<CR>
+nnoremap <A-t> :terminal<CR>
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-w>h <C-\><C-n><C-w>h
 tnoremap <C-w>j <C-\><C-n><C-w>j
 tnoremap <C-w>k <C-\><C-n><C-w>k
 tnoremap <C-w>l <C-\><C-n><C-w>l
 
-" Git
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gC :Gcommit -v -q<CR>
-nnoremap <leader>gP :Git push<CR>
-nnoremap <leader>ga :Gcommit --ammend<CR>
-nnoremap <leader>gt :Gcommit -v -q %<CR>
-nnoremap <leader>gd :Gvdiff<CR>
-nnoremap <leader>gg :Ggrep
-nnoremap <leader>gl :Glog<CR>
-nnoremap <leader>gp :Git pull<CR>
-nnoremap <leader>gc :Git checkout<Space>
-nnoremap <leader>gb :Git branch<Space>
-nnoremap <leader>ge :Gedit<CR>
-nnoremap <leader>gr :Gread<CR>
-nnoremap <leader>gw :Gwrite<CR><CR>
-nnoremap <leader>go :Gbrowse<CR>
-nnoremap <leader>gm :Gmerge<CR>
-nnoremap <leader>gB :Gblame<CR>
+" NetRW file explorer
+nnoremap <leader>k :Explore<CR>
+
+"" Edit VIMRC
+nmap <silent> <leader>ev :edit $MYVIMRC<CR>
+
+"" Source VIMRC
+nmap <silent> <leader>ee :source $MYVIMRC<CR>
 
 "" Abbreviations
 cnoreabbrev W! w!
@@ -474,3 +319,68 @@ cnoreabbrev WQ wq
 cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
+" === /Mappings
+
+" === Plugin Mappings
+let $FZF_DEFAULT_COMMAND = 'rg --files'
+let $FZF_DEFAULT_OPTS = '--reverse'
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let g:ctrlsf_search_mode = 'async'
+let g:ctrlsf_winsize = '50%'
+let g:ctrlsf_position = 'left'
+let g:ctrlsf_ackprg = 'rg'
+
+"" CtrlSF - sublime text-esque global search and replace
+nmap     <A-f> <Plug>CtrlSFPrompt
+vmap     <A-f> <Plug>CtrlSFVwordPath
+vmap     <leader>fF <Plug>CtrlSFVwordExec
+nmap     <leader>fn <Plug>CtrlSFCwordPath
+nmap     <leader>fp <Plug>CtrlSFPwordPath
+nnoremap <leader>fo :CtrlSFOpen<CR>
+nnoremap <leader>ft :CtrlSFToggle<CR>
+
+"" Fuzzy match files
+nnoremap <A-s> :Files<CR>
+
+"" Fuzzy match text in files
+nnoremap <A-g> :Rg<CR>
+
+"" Format file with prettier
+nnoremap <A-d> :Prettier<CR>
+
+"" Fuzzy match open buffers
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+nnoremap <silent> <A-e> :call fzf#run({
+\   'source':  reverse(<sid>buflist()),
+\   'sink':    function('<sid>bufopen'),
+\   'options': '+m',
+\   'down':    len(<sid>buflist()) + 2
+\ })<CR>
+
+"" Fix Tab selection with COC plugins
+nmap <expr> <silent> <C-n> <SID>select_current_word()
+function! s:select_current_word()
+  if !get(g:, 'coc_cursors_activated', 0)
+    return "\<Plug>(coc-cursors-word)"
+  endif
+  return "*\<Plug>(coc-cursors-word):nohlsearch\<CR>"
+endfunc
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+let g:coc_snippet_next = '<tab>'
+" === /Plugin Mappings
