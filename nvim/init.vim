@@ -348,6 +348,9 @@ nnoremap <A-g> :Rg<CR>
 "" Format file with prettier
 nnoremap <A-d> :Prettier<CR>
 
+vmap <A-v> :sort /\/[A-z]/ <CR>
+vmap <A-b> :sort <CR>
+
 "" Fuzzy match open buffers
 function! s:buflist()
   redir => ls
