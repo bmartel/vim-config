@@ -19,8 +19,12 @@ function! PackInit() abort
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('justinmk/vim-sneak')
   call minpac#add('bmartel/shades-of-purple.vim')
+  call minpac#add('bmartel/vim-one')
+  call minpac#add('artanikin/vim-synthwave84')
   call minpac#add('morhetz/gruvbox')
   call minpac#add('romainl/vim-dichromatic')
+  call minpac#add('godlygeek/tabular')
+  call minpac#add('plasticboy/vim-markdown')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -61,17 +65,19 @@ set hlsearch incsearch smartcase                 " search options
 set nobackup noswapfile nowritebackup            " disable backup/swap files
 set undofile undodir=~/.vim/undo undolevels=9999 " undo options
 
-set lazyredraw                                   " enable lazyredraw
+"set lazyredraw                                   " enable lazyredraw
 set nocursorline                                 " disable cursorline
 set ttyfast                                      " enable fast terminal connection
 set updatetime=300                               " Faster completion
 set timeoutlen=300                               " By default timeoutlen is 1000 ms
 
 set termguicolors
+let &t_ut=''
 set background=dark
-colorscheme shades_of_purple
+let g:one_allow_italics = 1
+colorscheme one
 
-set guifont=IBM\ Plex\ Mono\ 13
+set guifont=Operator\ Mono\ Book\ 15
 set guioptions-=m  "menu bar
 set guioptions-=T  "toolbar
 set guioptions-=r  "scrollbar right
@@ -95,7 +101,6 @@ let g:coc_global_extensions = [
   \ 'coc-html',
   \ 'coc-json',
   \ 'coc-snippets',
-  \ 'coc-graphql',
   \ 'coc-prisma',
   \ 'coc-eslint',
   \ 'coc-prettier',
@@ -152,7 +157,7 @@ function! CRustFmt()
 endfunction
 
 function! RemapFormatRust()
-  nnoremap <A-d> :call CRustFmt()<CR>
+  nnoremap <leader>fp :call CRustFmt()<CR>
 endfunction
 
 augroup Netrw 
@@ -210,8 +215,8 @@ nnoremap <leader>rh :sp#<CR>
 nnoremap <silent> <leader>b :ls<CR>:e #
 
 "" Buffer nav
-noremap <A-q> :bp<CR>
-noremap <A-p> :bn<CR>
+noremap <leader>bq :bp<CR>
+noremap <leader>bp :bn<CR>
 
 "" Close current buffer
 noremap <leader>c :bd<CR>
@@ -292,7 +297,7 @@ nnoremap <A-k> :tabp<CR>
 nnoremap <A-o> :tabo<CR>
 
 " Terminal
-nnoremap <A-t> :terminal<CR>
+nnoremap <leader>T :terminal<CR>
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-w>h <C-\><C-n><C-w>h
 tnoremap <C-w>j <C-\><C-n><C-w>j
@@ -331,8 +336,8 @@ let g:ctrlsf_position = 'left'
 let g:ctrlsf_ackprg = 'rg'
 
 "" CtrlSF - sublime text-esque global search and replace
-nmap     <A-f> <Plug>CtrlSFPrompt
-vmap     <A-f> <Plug>CtrlSFVwordPath
+nmap     <leader>ff <Plug>CtrlSFPrompt
+vmap     <leader>ff <Plug>CtrlSFVwordPath
 vmap     <leader>fF <Plug>CtrlSFVwordExec
 nmap     <leader>fn <Plug>CtrlSFCwordPath
 nmap     <leader>fp <Plug>CtrlSFPwordPath
@@ -340,16 +345,17 @@ nnoremap <leader>fo :CtrlSFOpen<CR>
 nnoremap <leader>ft :CtrlSFToggle<CR>
 
 "" Fuzzy match files
-nnoremap <A-s> :Files<CR>
+nnoremap <leader>sf :Files<CR>
 
 "" Fuzzy match text in files
-nnoremap <A-g> :Rg<CR>
+nnoremap <leader>st :Rg<CR>
 
 "" Format file with prettier
-nnoremap <A-d> :Prettier<CR>
+nnoremap <leader>fp :Prettier<CR>
 
-vmap <A-v> :sort /\/[A-z]/ <CR>
-vmap <A-b> :sort <CR>
+vmap <leader>ls :sort /\/[A-z]/ <CR>
+vmap <leader>lS :sort <CR>
+vmap <leader>lh :!column -t -o ' '<CR>
 
 "" Fuzzy match open buffers
 function! s:buflist()
@@ -361,7 +367,7 @@ endfunction
 function! s:bufopen(e)
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
-nnoremap <silent> <A-e> :call fzf#run({
+nnoremap <silent> <leader>sb :call fzf#run({
 \   'source':  reverse(<sid>buflist()),
 \   'sink':    function('<sid>bufopen'),
 \   'options': '+m',
