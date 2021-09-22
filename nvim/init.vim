@@ -77,7 +77,7 @@ set background=dark
 let g:one_allow_italics = 1
 colorscheme one
 
-set guifont=Operator\ Mono\ Book\ 15
+set guifont=Operator\ Mono\ Book:h15
 set guioptions-=m  "menu bar
 set guioptions-=T  "toolbar
 set guioptions-=r  "scrollbar right
