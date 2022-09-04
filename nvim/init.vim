@@ -14,8 +14,8 @@ function! PackInit() abort
   call minpac#add('bmartel/vim-snippets')
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-surround')
-  call minpac#add('junegunn/fzf', { 'do': '~/.fzf/install --all' })
-  call minpac#add('junegunn/fzf.vim')
+  call minpac#add('nvim-lua/plenary.nvim')
+  call minpac#add('nvim-telescope/telescope.nvim', { 'branch': '0.1.x' })
   call minpac#add('dyng/ctrlsf.vim')
   call minpac#add('justinmk/vim-sneak')
   call minpac#add('bmartel/shades-of-purple.vim')
@@ -25,6 +25,8 @@ function! PackInit() abort
   call minpac#add('romainl/vim-dichromatic')
   call minpac#add('godlygeek/tabular')
   call minpac#add('plasticboy/vim-markdown')
+  call minpac#add('github/copilot.vim')
+  call minpac#add('iloginow/vim-stylus')
 endfunction
 
 command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -101,6 +103,7 @@ let g:coc_global_extensions = [
   \ 'coc-html',
   \ 'coc-json',
   \ 'coc-snippets',
+  \ 'coc-deno',
   \ 'coc-prisma',
   \ 'coc-eslint',
   \ 'coc-prettier',
@@ -172,7 +175,7 @@ let mapleader=" "                               " leader key
 
 nnoremap <leader># :g/\v^(#\|$)/d_<cr>|          " delete commented/blank lines
 nnoremap <leader>d :w !diff % -<cr>|             " show diff
-nnoremap <silent> <leader>i gg=G``<cr>|          " fix indentation
+nnoremap <silent> <leader>id gg=G``<cr>|          " fix indentation
 nnoremap <leader>rt :retab<cr>|                   " convert tabs to spaces
 nnoremap <silent> <leader>ts :%s/\s\+$//e<cr>|    " trim whitespace
 nnoremap <leader>tw :set wrap! wrap?<cr>|         " toggle wrapping
@@ -234,6 +237,8 @@ endfunction
 noremap <leader>ac :%bd<CR>
 noremap <leader>oc :%bd<CR><C-O>:bd#<CR>
 noremap <leader>ae :call CleanEmptyBuffers()<CR>
+
+noremap <leader>it :put =strftime('%s')<CR>
 
 "" maintain Visual Mode after shifting > and <
 vmap < <gv
@@ -344,11 +349,12 @@ nmap     <leader>fp <Plug>CtrlSFPwordPath
 nnoremap <leader>fo :CtrlSFOpen<CR>
 nnoremap <leader>ft :CtrlSFToggle<CR>
 
-"" Fuzzy match files
-nnoremap <leader>sf :Files<CR>
-
 "" Fuzzy match text in files
-nnoremap <leader>st :Rg<CR>
+nnoremap <leader>sf <cmd>lua require('telescope.builtin').find_files()<cr>
+"" Fuzzy match files
+nnoremap <leader>sg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>sb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>sh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 "" Format file with prettier
 nnoremap <leader>fp :Prettier<CR>
@@ -357,39 +363,13 @@ vmap <leader>ls :sort /\/[A-z]/ <CR>
 vmap <leader>lS :sort <CR>
 vmap <leader>lh :!column -t -o ' '<CR>
 
-"" Fuzzy match open buffers
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-nnoremap <silent> <leader>sb :call fzf#run({
-\   'source':  reverse(<sid>buflist()),
-\   'sink':    function('<sid>bufopen'),
-\   'options': '+m',
-\   'down':    len(<sid>buflist()) + 2
-\ })<CR>
-
-"" Fix Tab selection with COC plugins
-nmap <expr> <silent> <C-n> <SID>select_current_word()
-function! s:select_current_word()
-  if !get(g:, 'coc_cursors_activated', 0)
-    return "\<Plug>(coc-cursors-word)"
-  endif
-  return "*\<Plug>(coc-cursors-word):nohlsearch\<CR>"
-endfunc
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
+" remap for complete to use tab and <cr>
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-let g:coc_snippet_next = '<tab>'
+    \ coc#pum#visible() ? coc#pum#next(1):
+    \ <SID>check_back_space() ? "\<Tab>" :
+    \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
 " === /Plugin Mappings
